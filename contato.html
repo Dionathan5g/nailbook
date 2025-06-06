@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NailBook - Fale Conosco</title>
+    <link rel="stylesheet" href="Css/style.css">
+</head>
+
+<body>
+    <div class="loader">
+        <div class="spinner"></div>
+    </div>
+
+    <header>
+        <div class="logo-container">
+            <img src="Imagens/logosite.png" alt="Logo NailBook" class="logo">
+            <h1>NailBook - Fale Conosco</h1>
+        </div>
+        <nav class="menu">
+            <ul>
+                <li><a href="index.html">Início</a></li>
+                <li><a href="agendamentos.html">Agendamentos</a></li>
+                <li><a href="clientes.html">Clientes</a></li>
+                <li><a href="relatorios.html">Relatórios</a></li>
+                <li><a href="contato.html" class="active">Fale Conosco</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <form id="form-contato">
+            <div class="form-group">
+                <label for="nome-contato">Nome:</label>
+                <input type="text" id="nome-contato" name="nome" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email-contato">E-mail:</label>
+                <input type="email" id="email-contato" name="email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="telefone-contato">Telefone:</label>
+                <input type="tel" id="telefone-contato" name="telefone" placeholder="(xx) xxxx-xxxx" required>
+            </div>
+
+            <div class="form-group">
+                <label for="mensagem-contato">Mensagem:</label>
+                <textarea id="mensagem-contato" name="mensagem" rows="5" required></textarea>
+            </div>
+
+            <button type="submit" class="btn-submit">Enviar Mensagem</button>
+        </form>
+    </main>
+
+    <script src="js/main.js"></script>
+    <script src="js/contato.js"></script>
+</body>
+
+</html>
