@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <title>NailBook - Agendamentos</title>
+    <link rel="stylesheet" href="Css/Css.css">
+    <script src="Java/agendamentos.js" defer></script>
+</head>
+
+<body>
+    <header>
+        <div class="logo-container">
+            <img src="Imagens/logosite.png" alt="Logo NailBook" class="logo">
+            <h1>NailBook - Agendamentos</h1>
+        </div>
+
+        <nav class="menu">
+            <ul>
+                <li><a href="index.html">Início</a></li>
+                <li><a href="agendamentos.html" class="active">Agendamentos</a></li>
+                <li><a href="clientes.html">Clientes</a></li>
+                <li><a href="relatorios.html">Relatórios</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h2>Agendamentos Recentes</h2>
+
+        <div class="filters">
+            <label for="filter-date">Filtrar por data:</label>
+            <input type="date" id="filter-date">
+            <button id="btn-filter">Filtrar</button>
+            <button id="btn-clear">Limpar</button>
+        </div>
+
+        <div id="lista-agendamentos">
+            <!-- Os agendamentos serão carregados aqui -->
+        </div>
+    </main>
+
+    <script>
+        // Este script será movido para agendamentos.js
+        document.addEventListener('DOMContentLoaded', function () {
+            // Carrega os agendamentos do LocalStorage
+            const agendamentos = JSON.parse(localStorage.getItem('agendamentos')) || {};
+
+            // Exibe os agendamentos
+            const container = document.getElementById('lista-agendamentos');
+
+            if (Object.keys(agendamentos).length === 0) {
+                container.innerHTML = '<p>Nenhum agendamento encontrado.</p>';
+                return;
+            }
+
+            // Ordena as datas da mais recente para a mais antiga
+            const datasOrdenadas = Object.keys(agendamentos).sort((a, b) => {
+                return new Date(b.split('-').reverse().join('-')) - new Date(a.split('-').reverse().join('-'));
+            });
+
+            // Cria a tabela de agendamentos
+            let html = '<table><thead><tr><th>Data</th><th>Cliente</th><th>Serviço</th><th>Horário</th><th>Preço</th></tr></thead><tbody>';
+
+            datasOrdenadas.forEach(data => {
+                agendamentos[data].forEach(agendamento => {
+                    html += `
+                        <tr>
+                            <td>${data}</td>
+                            <td>${agendamento.nome}</td>
+                            <td>${agendamento.servico}</td>
+                            <td>${agendamento.horario}</td>
+                            <td>R$ ${agendamento.preco.toFixed(2)}</td>
+                        </tr>
+                    `;
+                });
+            });
+
+            html += '</tbody></table>';
+            container.innerHTML = html;
+
+            // Filtros
+            document.getElementById('btn-filter').addEventListener('click', function () {
+                const dataFiltro = document.getElementById('filter-date').value;
+                if (!dataFiltro) return;
+
+                const dataFormatada = dataFiltro.split('-').reverse().join('-');
+                const agendamentosFiltrados = agendamentos[dataFormatada] || [];
+
+                let htmlFiltrado = '<table><thead><tr><th>Data</th><th>Cliente</th><th>Serviço</th><th>Horário</th><th>Preço</th></tr></thead><tbody>';
+
+                if (agendamentosFiltrados.length === 0) {
+                    htmlFiltrado += '<tr><td colspan="5">Nenhum agendamento para esta data</td></tr>';
+                } else {
+                    agendamentosFiltrados.forEach(agendamento => {
+                        htmlFiltrado += `
+                            <tr>
+                                <td>${dataFormatada}</td>
+                                <td>${agendamento.nome}</td>
+                                <td>${agendamento.servico}</td>
+                                <td>${agendamento.horario}</td>
+                                <td>R$ ${agendamento.preco.toFixed(2)}</td>
+                            </tr>
+                        `;
+                    });
+                }
+
+                htmlFiltrado += '</tbody></table>';
+                container.innerHTML = htmlFiltrado;
+            });
+
+            document.getElementById('btn-clear').addEventListener('click', function () {
+                document.getElementById('filter-date').value = '';
+                container.innerHTML = html;
+            });
+        });
+    </script>
+</body>
+
+</html>

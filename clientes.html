@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>NailBook - Clientes</title>
+    <link rel="stylesheet" href="Css/Css.css">
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <img src="Imagens/logosite.png" alt="Logo NailBook" class="logo">
+            <h1>NailBook - Clientes</h1>
+        </div>
+
+        <nav class="menu">
+            <ul>
+                <li><a href="index.html">Início</a></li>
+                <li><a href="agendamentos.html">Agendamentos</a></li>
+                <li><a href="servicos.html">Serviços</a></li>
+                <li><a href="clientes.html">Clientes</a></li>
+                <li><a href="relatorios.html">Relatórios</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h2>Lista de Clientes</h2>
+        <div class="clientes-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Último Serviço</th>
+                        <th>Data</th>
+                        <th>Valor</th>
+                    </tr>
+                </thead>
+                <tbody id="lista-clientes">
+                    <!-- Os clientes serão carregados via JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <!-- Loader -->
+    <div class="loader">
+        <div class="spinner"></div>
+    </div>
+
+    <script src="Java/clientes.js"></script>
+    <script>
+        // Animação para a tabela de clientes
+        document.addEventListener('DOMContentLoaded', function() {
+            const rows = document.querySelectorAll('#lista-clientes tr');
+            rows.forEach((row, index) => {
+                setTimeout(() => {
+                    row.style.opacity = '0';
+                    row.style.animation = 'fadeIn 0.5s forwards';
+                    row.style.animationDelay = `${index * 0.1}s`;
+                }, 0);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <title>NailBook - Agendamentos</title>
+    <link rel="stylesheet" href="Css/Css.css">
+    <script src="Java/salvar.js" defer></script>
+</head>
+
+<body>
+    <header>
+        <div class="logo-container">
+            <img src="Imagens/logosite.png" alt="Logo NailBook" class="logo">
+            <h1>NailBook - Agendamentos</h1>
+        </div>
+
+        <nav class="menu">
+            <ul>
+                <li><a href="index.html">Início</a></li>
+                <li><a href="agendamentos.html">Agendamentos</a></li>
+                <li><a href="clientes.html">Clientes</a></li>
+                <li><a href="relatorios.html">Relatórios</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <form id="form-agendamento" action="salvar.html" method="GET">
+            <label for="nome">Nome da Cliente:</label>
+            <input type="text" id="nome" name="nome" required>
+
+            <label for="servico">Serviço:</label>
+            <select id="servico" name="servico" required>
+                <option value="">Selecione</option>
+                <option value="Manicure" data-preco="30.00">Manicure - R$ 30,00</option>
+                <option value="Pedicure" data-preco="40.00">Pedicure - R$ 40,00</option>
+                <option value="Unha em Gel" data-preco="70.00">Unha em Gel - R$ 70,00</option>
+                <option value="Francesinha" data-preco="60.00">Francesinha - R$ 60,00</option>
+            </select>
+
+            <label for="preco">Preço:</label>
+            <input type="text" id="preco" name="preco" readonly>
+
+            <label for="horario">Horário:</label>
+            <input type="time" id="horario" name="horario" required>
+
+            <label for="data">Data:</label>
+            <input type="date" id="data" name="data" required>
+
+            <button type="submit">Agendar</button>
+        </form>
+    </main>
+
+    <script>
+        // Atualiza o preço quando o serviço é selecionado
+        document.getElementById('servico').addEventListener('change', function () {
+            const servicoSelecionado = this.options[this.selectedIndex];
+            const preco = servicoSelecionado.getAttribute('data-preco');
+            document.getElementById('preco').value = `R$ ${parseFloat(preco).toFixed(2)}`;
+        });
+
+        // Processa o formulário
+        document.getElementById('form-agendamento').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const nome = encodeURIComponent(document.getElementById('nome').value);
+            const servico = encodeURIComponent(document.getElementById('servico').value);
+            const preco = encodeURIComponent(document.getElementById('preco').value.replace('R$ ', ''));
+            const horario = encodeURIComponent(document.getElementById('horario').value);
+            const data = encodeURIComponent(document.getElementById('data').value);
+
+            window.location.href = `salvar.html?nome=${nome}&servico=${servico}&preco=${preco}&horario=${horario}&data=${data}`;
+        });
+    </script>
+</body>
+
+</html>
