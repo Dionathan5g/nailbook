@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <title>NailBook - Agendamentos</title>
     <link rel="stylesheet" href="Css/Css.css">
-    <script src="Java/salvar.js" defer></script>
 </head>
 
 <body>
@@ -21,12 +20,13 @@
                 <li><a href="agendamentos.html">Agendamentos</a></li>
                 <li><a href="clientes.html">Clientes</a></li>
                 <li><a href="relatorios.html">Relatórios</a></li>
+                <li><a href="contato.html">Fale Conosco</a></li>
             </ul>
         </nav>
     </header>
 
     <main>
-        <form id="form-agendamento" action="salvar.html" method="GET">
+        <form id="form-agendamento" method="GET">
             <label for="nome">Nome da Cliente:</label>
             <input type="text" id="nome" name="nome" required>
 
@@ -57,7 +57,7 @@
         document.getElementById('servico').addEventListener('change', function () {
             const servicoSelecionado = this.options[this.selectedIndex];
             const preco = servicoSelecionado.getAttribute('data-preco');
-            document.getElementById('preco').value = `R$ ${parseFloat(preco).toFixed(2)}`;
+            document.getElementById('preco').value = preco ? `R$ ${parseFloat(preco).toFixed(2)}` : '';
         });
 
         // Processa o formulário
@@ -70,6 +70,27 @@
             const horario = encodeURIComponent(document.getElementById('horario').value);
             const data = encodeURIComponent(document.getElementById('data').value);
 
+            // Salva no localStorage
+            const agendamentos = JSON.parse(localStorage.getItem('agendamentos')) || {};
+            const dataFormatada = decodeURIComponent(data).split('-').reverse().join('-');
+
+            if (!agendamentos[dataFormatada]) {
+                agendamentos[dataFormatada] = [];
+            }
+
+            agendamentos[dataFormatada].push({
+                nome: decodeURIComponent(nome),
+                servico: decodeURIComponent(servico),
+                preco: parseFloat(preco),
+                horario: decodeURIComponent(horario)
+            });
+
+            localStorage.setItem('agendamentos', JSON.stringify(agendamentos));
+
+            // Mensagem de sucesso
+            alert("✅ Agendamento realizado com sucesso!");
+
+            // Redirecionamento
             window.location.href = `salvar.html?nome=${nome}&servico=${servico}&preco=${preco}&horario=${horario}&data=${data}`;
         });
     </script>
