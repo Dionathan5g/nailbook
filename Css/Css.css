@@ -832,3 +832,43 @@ tr:hover {
         grid-template-columns: 1fr;
     }
 }
+/* Estilos específicos para a tabela de agendamentos */
+.tabela-padrao {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 14px;
+}
+
+.tabela-padrao th {
+    background-color: var(--vermelho-principal);
+    color: white;
+    padding: 12px 15px;
+    text-align: left;
+    font-weight: 600;
+}
+
+.tabela-padrao td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #f0f0f0;
+    color: #333; /* Cor escura para melhor contraste */
+}
+
+.tabela-padrao tr:nth-child(even) {
+    background-color: #f9f9f9; /* Fundo levemente cinza para linhas pares */
+}
+
+.tabela-padrao tr:hover {
+    background-color: #f0f0f0; /* Efeito hover sutil */
+}
+
+/* Melhoria para células de preço */
+.tabela-padrao td:nth-child(5) {
+    font-weight: bold;
+    color: var(--vermelho-principal); /* Destaca o preço */
+}
+
+/* Melhoria para células de horário */
+.tabela-padrao td:nth-child(4) {
+    font-family: monospace; /* Fonte monoespaçada para horários */
+}
