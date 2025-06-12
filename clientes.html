@@ -9,53 +9,62 @@
 <body>
     <header class="header-padrao">
         <div class="logo-container">
-           <img src="Imagens/logosite.png" alt="Logo NailBook" class="logo">
+            <img src="Imagens/logosite.png" alt="Logo NailBook" class="logo">
             <h1>NailBook - Clientes</h1>
         </div>
         <nav class="menu">
             <ul>
-                <li><a href="index.html">Início</a></li>
-                <li><a href="agendamentos.html">Agendamentos</a></li>
-                <li><a href="clientes.html">Clientes</a></li>
-                <li><a href="relatorios.html">Relatórios</a></li>
-                <li><a href="contato.html">Fale Conosco</a></li>
+                <li><a href="index.html"><i class="fas fa-home"></i> Início</a></li>
+                <li><a href="agendamentos.html"><i class="fas fa-calendar-alt"></i> Agendamentos</a></li>
+                <li><a href="clientes.html" class="active"><i class="fas fa-users"></i> Clientes</a></li>
+                <li><a href="relatorios.html"><i class="fas fa-chart-pie"></i> Relatórios</a></li>
+                <li><a href="contato.html"><i class="fas fa-envelope"></i> Fale Conosco</a></li>
             </ul>
         </nav>
     </header>
 
     <main class="container-padrao">
-        <section class="formulario-padrao">
-            <h2><i class="fas fa-user-edit"></i> Cadastro de Clientes</h2>
+        <!-- Seção de Cadastro -->
+        <section class="form-section">
+            <h2><i class="fas fa-user-plus"></i> Cadastrar Novo Cliente</h2>
             
-            <form id="form-cliente">
-                <div class="grupo-input">
-                    <label for="cliente-nome">Nome Completo:</label>
-                    <input type="text" id="cliente-nome" placeholder="Digite o nome do cliente" required>
+            <form id="form-cliente" class="form-padrao">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="cliente-nome">Nome Completo</label>
+                        <input type="text" id="cliente-nome" class="input-padrao" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="cliente-telefone">Telefone</label>
+                        <input type="tel" id="cliente-telefone" class="input-padrao" required>
+                    </div>
                 </div>
                 
-                <div class="grupo-input">
-                    <label for="cliente-telefone">Telefone:</label>
-                    <input type="tel" id="cliente-telefone" placeholder="(00) 00000-0000" required>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="cliente-email">E-mail</label>
+                        <input type="email" id="cliente-email" class="input-padrao">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="cliente-aniversario">Data Nascimento</label>
+                        <input type="date" id="cliente-aniversario" class="input-padrao">
+                    </div>
                 </div>
                 
-                <div class="grupo-input">
-                    <label for="cliente-email">E-mail:</label>
-                    <input type="email" id="cliente-email" placeholder="cliente@exemplo.com">
-                </div>
-                
-                <div class="grupo-input">
-                    <label for="cliente-aniversario">Data de Nascimento:</label>
-                    <input type="date" id="cliente-aniversario">
-                </div>
-                
-                <div class="grupo-input">
-                    <label>Status:</label>
-                    <div class="grupo-radio">
-                        <label>
-                            <input type="radio" name="status" value="ativo" checked> Ativo
+                <div class="form-group">
+                    <label>Status do Cliente</label>
+                    <div class="radio-group">
+                        <label class="radio-option">
+                            <input type="radio" name="status" value="ativo" checked>
+                            <span class="radio-checkmark"></span>
+                            Ativo
                         </label>
-                        <label>
-                            <input type="radio" name="status" value="inativo"> Inativo
+                        <label class="radio-option">
+                            <input type="radio" name="status" value="inativo">
+                            <span class="radio-checkmark"></span>
+                            Inativo
                         </label>
                     </div>
                 </div>
@@ -66,28 +75,29 @@
             </form>
         </section>
 
-        <section class="lista-padrao">
-            <h2><i class="fas fa-list"></i> Lista de Clientes</h2>
+        <!-- Seção de Listagem -->
+        <section class="list-section">
+            <h2><i class="fas fa-list-ul"></i> Lista de Clientes</h2>
             
-            <div class="busca-padrao">
-                <input type="text" id="busca-cliente" placeholder="Buscar cliente...">
-                <button id="btn-buscar" class="botao-icone">
+            <div class="search-box">
+                <input type="text" id="busca-cliente" placeholder="Pesquisar cliente..." class="search-input">
+                <button id="btn-buscar" class="search-button">
                     <i class="fas fa-search"></i>
                 </button>
             </div>
             
-            <div class="tabela-container">
-                <table class="tabela-padrao" id="tabela-clientes">
+            <div class="table-responsive">
+                <table id="tabela-clientes" class="client-table">
                     <thead>
                         <tr>
                             <th>Nome</th>
-                            <th>Telefone</th>
+                            <th>Contato</th>
                             <th>Status</th>
                             <th>Ações</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- Dados serão carregados via JavaScript -->
+                        <!-- Dados serão preenchidos via JavaScript -->
                     </tbody>
                 </table>
             </div>
@@ -98,6 +108,7 @@
         <p>© 2023 NailBook - Todos os direitos reservados</p>
     </footer>
 
+    <!-- Scripts -->
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script>
         // Configuração do Supabase
@@ -105,30 +116,135 @@
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...';
         const supabase = supabase.createClient(supabaseUrl, supabaseKey);
         
-        // Carregar e gerenciar clientes
+        // Carrega clientes ao iniciar
         document.addEventListener('DOMContentLoaded', async () => {
-            await carregarClientes();
+            await loadClientes();
             
-            document.getElementById('form-cliente').addEventListener('submit', async (e) => {
-                e.preventDefault();
-                await salvarCliente();
-            });
-            
-            document.getElementById('btn-buscar').addEventListener('click', async () => {
-                await buscarClientes();
-            });
+            // Configura eventos
+            document.getElementById('form-cliente').addEventListener('submit', handleSubmit);
+            document.getElementById('btn-buscar').addEventListener('click', searchClientes);
         });
-        
-        async function carregarClientes() {
-            // Implementação similar à anterior
+
+        // Carrega lista de clientes
+        async function loadClientes() {
+            try {
+                const { data, error } = await supabase
+                    .from('clientes')
+                    .select('*')
+                    .order('nome', { ascending: true });
+                
+                if (error) throw error;
+                
+                renderClientes(data || []);
+            } catch (error) {
+                console.error("Erro ao carregar clientes:", error);
+                alert("Erro ao carregar clientes");
+            }
         }
-        
-        async function salvarCliente() {
-            // Implementação similar à anterior
+
+        // Renderiza clientes na tabela
+        function renderClientes(clientes) {
+            const tbody = document.querySelector('#tabela-clientes tbody');
+            tbody.innerHTML = '';
+            
+            clientes.forEach(cliente => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${cliente.nome || '-'}</td>
+                    <td>
+                        <div>${cliente.telefone || '-'}</div>
+                        <small>${cliente.email || ''}</small>
+                    </td>
+                    <td>
+                        <span class="status-badge ${cliente.ativo ? 'active' : 'inactive'}">
+                            ${cliente.ativo ? 'Ativo' : 'Inativo'}
+                        </span>
+                    </td>
+                    <td class="actions">
+                        <button class="action-btn edit" data-id="${cliente.id}">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="action-btn ${cliente.ativo ? 'deactivate' : 'activate'}" 
+                                data-id="${cliente.id}">
+                            <i class="fas fa-${cliente.ativo ? 'times' : 'check'}"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+            
+            // Adiciona eventos aos botões
+            setupActionButtons();
         }
-        
-        async function buscarClientes() {
-            // Implementação similar à anterior
+
+        // Configura eventos dos botões de ação
+        function setupActionButtons() {
+            document.querySelectorAll('.action-btn.edit').forEach(btn => {
+                btn.addEventListener('click', () => editCliente(btn.dataset.id));
+            });
+            
+            document.querySelectorAll('.action-btn.activate, .action-btn.deactivate').forEach(btn => {
+                btn.addEventListener('click', () => toggleClienteStatus(btn.dataset.id));
+            });
+        }
+
+        // Manipula envio do formulário
+        async function handleSubmit(e) {
+            e.preventDefault();
+            
+            const clienteData = {
+                nome: document.getElementById('cliente-nome').value,
+                telefone: document.getElementById('cliente-telefone').value,
+                email: document.getElementById('cliente-email').value,
+                aniversario: document.getElementById('cliente-aniversario').value,
+                ativo: document.querySelector('input[name="status"]:checked').value === 'ativo'
+            };
+            
+            try {
+                const { error } = await supabase
+                    .from('clientes')
+                    .upsert([clienteData]);
+                
+                if (error) throw error;
+                
+                alert('Cliente salvo com sucesso!');
+                document.getElementById('form-cliente').reset();
+                await loadClientes();
+            } catch (error) {
+                console.error("Erro ao salvar cliente:", error);
+                alert("Erro ao salvar cliente");
+            }
+        }
+
+        // Pesquisa clientes
+        async function searchClientes() {
+            const termo = document.getElementById('busca-cliente').value.trim();
+            if (!termo) return await loadClientes();
+            
+            try {
+                const { data, error } = await supabase
+                    .from('clientes')
+                    .select('*')
+                    .ilike('nome', `%${termo}%`);
+                
+                if (error) throw error;
+                
+                renderClientes(data || []);
+            } catch (error) {
+                console.error("Erro ao buscar clientes:", error);
+            }
+        }
+
+        // Editar cliente
+        async function editCliente(id) {
+            // Implementar lógica de edição
+            console.log("Editar cliente:", id);
+        }
+
+        // Alternar status do cliente
+        async function toggleClienteStatus(id) {
+            // Implementar lógica de ativar/desativar
+            console.log("Alternar status do cliente:", id);
         }
     </script>
 </body>
