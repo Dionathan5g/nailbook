@@ -9,16 +9,15 @@
 <body>
     <header class="header-padrao">
         <div class="logo-container">
-             <img src="Imagens/logosite.png" alt="Logo NailBook" class="logo">
+            <img src="Imagens/logosite.png" alt="Logo NailBook" class="logo">
             <h1>NailBook - Relatórios</h1>
         </div>
-            <nav class="menu">
+        <nav class="menu">
             <ul>
                 <li><a href="index.html">Início</a></li>
                 <li><a href="agendamentos.html">Agendamentos</a></li>
                 <li><a href="clientes.html">Clientes</a></li>
                 <li><a href="relatorios.html">Relatórios</a></li>
-                <li><a href="contato.html">Fale Conosco</a></li>
             </ul>
         </nav>
     </header>
@@ -26,23 +25,22 @@
     <main class="container-padrao">
         <section class="formulario-padrao">
             <h2><i class="fas fa-filter"></i> Filtros do Relatório</h2>
-            
             <form id="form-filtro">
                 <div class="grupo-input-duplo">
                     <div class="grupo-input">
                         <label for="data-inicio">Data Início:</label>
-                        <input type="date" id="data-inicio">
+                        <input type="date" id="data-inicio" class="form-control">
                     </div>
                     
                     <div class="grupo-input">
                         <label for="data-fim">Data Fim:</label>
-                        <input type="date" id="data-fim">
+                        <input type="date" id="data-fim" class="form-control">
                     </div>
                 </div>
                 
                 <div class="grupo-input">
                     <label for="filtro-status">Status:</label>
-                    <select id="filtro-status">
+                    <select id="filtro-status" class="form-control">
                         <option value="todos">Todos</option>
                         <option value="concluido">Concluídos</option>
                         <option value="agendado">Agendados</option>
@@ -99,34 +97,7 @@
         <p>© 2023 NailBook - Todos os direitos reservados</p>
     </footer>
 
-    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-    <script>
-        // Configuração do Supabase
-        const supabaseUrl = 'https://qjygugnuyrkcmammapmf.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...';
-        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
-        
-        // Carregar e gerenciar relatórios
-        document.addEventListener('DOMContentLoaded', async () => {
-            document.getElementById('form-filtro').addEventListener('submit', async (e) => {
-                e.preventDefault();
-                await gerarRelatorio();
-            });
-            
-            // Carrega relatório inicial (últimos 30 dias)
-            const dataFim = new Date();
-            const dataInicio = new Date();
-            dataInicio.setDate(dataInicio.getDate() - 30);
-            
-            document.getElementById('data-inicio').valueAsDate = dataInicio;
-            document.getElementById('data-fim').valueAsDate = dataFim;
-            
-            await gerarRelatorio();
-        });
-        
-        async function gerarRelatorio() {
-            // Implementação similar à anterior
-        }
-    </script>
+    <script src="js/db.js"></script>
+    <script src="relatorios.js"></script>
 </body>
 </html>
