@@ -2,72 +2,58 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>NailBook - Início</title>
-    <link rel="stylesheet" href="Css/Css.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Link para ícones (opcional) -->
+    <title>NailBook - Sistema de Agendamentos</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="Css/Css.css">
 </head>
 <body>
-    <!-- HEADER IDÊNTICO AO AGENDAMENTOS.HTML -->
     <header class="header-padrao">
         <div class="logo-container">
-            <img src="./imagens/logosite.png" alt="Logo NailBook" class="logo">
             <h1>NailBook - Sistema de Agendamentos</h1>
         </div>
         <nav class="menu-padrao">
             <ul>
-                <li><a href="index.html" class="active">Início</a></li>
-                <li><a href="agendamentos.html">Agendamentos</a></li>
-                <li><a href="clientes.html">Clientes</a></li>
-                <li><a href="relatorios.html">Relatórios</a></li>
-                <li><a href="contato.html">Fale Conosco</a></li>
+                <li><a href="index.html" class="active"><i class="fas fa-home"></i> Início</a></li>
+                <li><a href="agendamentos.html"><i class="fas fa-calendar-alt"></i> Agendamentos</a></li>
+                <li><a href="clientes.html"><i class="fas fa-users"></i> Clientes</a></li>
+                <li><a href="relatorios.html"><i class="fas fa-chart-pie"></i> Relatórios</a></li>
+                <li><a href="contato.html"><i class="fas fa-envelope"></i> Fale Conosco</a></li>
             </ul>
         </nav>
     </header>
 
-    <!-- CONTEÚDO PRINCIPAL (MANTENDO SUAS FUNCIONALIDADES) -->
     <main class="container-padrao">
-        <!-- Seção de Boas-Vindas -->
         <section class="painel-bem-vindo">
-            <h2>Bem-vindo ao NailBook</h2>
+            <h2><i class="fas fa-heart"></i> Bem-vindo ao NailBook</h2>
             <p>O sistema completo para gerenciamento do seu salão</p>
         </section>
 
-        <!-- Dashboard com Cards -->
         <div class="dashboard-cards">
-            <!-- Card Agendamentos -->
             <div class="card-padrao">
-                <i class="fas fa-calendar-alt icone-card"></i>
-                <h3>Agendamentos</h3>
+                <h3><i class="fas fa-calendar-alt"></i> Agendamentos</h3>
                 <p>Gerencie seus horários marcados</p>
                 <a href="agendamentos.html" class="botao-padrao">Acessar</a>
             </div>
-
-            <!-- Card Clientes -->
+            
             <div class="card-padrao">
-                <i class="fas fa-users icone-card"></i>
-                <h3>Clientes</h3>
+                <h3><i class="fas fa-users"></i> Clientes</h3>
                 <p>Cadastro completo de clientes</p>
                 <a href="clientes.html" class="botao-padrao">Acessar</a>
             </div>
-
-            <!-- Card Relatórios -->
+            
             <div class="card-padrao">
-                <i class="fas fa-chart-pie icone-card"></i>
-                <h3>Relatórios</h3>
+                <h3><i class="fas fa-chart-pie"></i> Relatórios</h3>
                 <p>Relatórios financeiros</p>
                 <a href="relatorios.html" class="botao-padrao">Acessar</a>
             </div>
         </div>
 
-        <!-- Formulário Rápido (Opcional - Mantendo Supabase) -->
         <section class="form-rapido">
             <h3><i class="fas fa-plus-circle"></i> Novo Agendamento Rápido</h3>
             <form id="form-agendamento-rapido">
                 <div class="input-group">
                     <label for="nome-cliente">Nome:</label>
-                    <input type="text" id="nome-cliente" required>
+                    <input type="text" id="nome-cliente" placeholder="Digite o nome do cliente" required>
                 </div>
                 
                 <div class="input-group">
@@ -76,6 +62,8 @@
                         <option value="">Selecione...</option>
                         <option value="Manicure">Manicure</option>
                         <option value="Pedicure">Pedicure</option>
+                        <option value="Unha em Gel">Unha em Gel</option>
+                        <option value="Francesinha">Francesinha</option>
                     </select>
                 </div>
 
@@ -86,42 +74,8 @@
         </section>
     </main>
 
-    <!-- FOOTER PADRÃO -->
     <footer class="footer-padrao">
         <p>© 2023 NailBook - Todos os direitos reservados</p>
     </footer>
-
-    <!-- SCRIPTS (MANTENDO SUPABASE E FUNCIONALIDADES) -->
-    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-    <script src="./js/script.js"></script>
-    
-    <script>
-        // Configuração do Supabase (MESMO CÓDIGO ANTERIOR)
-        const supabaseUrl = 'https://qjygugnuyrkcmammapmf.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...';
-        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
-
-        // Formulário Rápido (Funcionalidade mantida)
-        document.getElementById('form-agendamento-rapido').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const agendamento = {
-                nome: document.getElementById('nome-cliente').value,
-                servico: document.getElementById('servico-rapido').value,
-                data: new Date().toISOString()
-            };
-
-            const { error } = await supabase
-                .from('agendamentos')
-                .insert([agendamento]);
-
-            if (error) {
-                alert('Erro: ' + error.message);
-            } else {
-                alert('Agendamento rápido criado!');
-                e.target.reset();
-            }
-        });
-    </script>
 </body>
 </html>
