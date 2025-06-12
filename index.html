@@ -1,62 +1,134 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
+    <title>NailBook - Agendamentos</title>
+    <!-- Verifique o caminho exato do CSS -->
+    <link rel="stylesheet" href="./css/style.css"> <!-- Caminho corrigido (note o './') -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nailbook</title>
-    <!-- SEU CSS ORIGINAL (não alterado) -->
     <style>
-        /* [Seus estilos originais aqui] */
+        /* Estilos básicos temporários */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        header {
+            background: #ff6b98;
+            color: white;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        form {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            box-sizing: border-box;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            background: #ff6b98;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
-    <!-- SEU HTML ORIGINAL (não alterado) -->
     <header>
-        <!-- Seu cabeçalho original -->
+        <div class="logo-container">
+            <img src="./imagens/logosite.png" alt="Logo NailBook" class="logo" style="height: 50px;">
+            <h1>NailBook - Agendamentos</h1>
+        </div>
+        <nav class="menu">
+            <ul style="list-style: none; padding: 0; display: flex; gap: 15px;">
+                <li><a href="index.html">Início</a></li>
+                <li><a href="agendamentos.html">Agendamentos</a></li>
+                <li><a href="clientes.html">Clientes</a></li>
+                <li><a href="relatorios.html">Relatórios</a></li>
+                <li><a href="contato.html">Fale Conosco</a></li>
+            </ul>
+        </nav>
     </header>
 
     <main>
-        <!-- Seu conteúdo original -->
         <form id="form-agendamento">
-            <!-- Seus campos de formulário originais -->
-            <button type="button" onclick="salvarAgendamento()">Enviar</button>
+            <label for="nome">Nome da Cliente:</label>
+            <input type="text" id="nome" name="nome" required>
+
+            <label for="servico">Serviço:</label>
+            <select id="servico" name="servico" required>
+                <option value="">Selecione</option>
+                <option value="Manicure" data-preco="30.00">Manicure - R$ 30,00</option>
+                <option value="Pedicure" data-preco="40.00">Pedicure - R$ 40,00</option>
+                <option value="Unha em Gel" data-preco="70.00">Unha em Gel - R$ 70,00</option>
+                <option value="Francesinha" data-preco="60.00">Francesinha - R$ 60,00</option>
+            </select>
+
+            <label for="preco">Preço:</label>
+            <input type="text" id="preco" name="preco" readonly>
+
+            <label for="horario">Horário:</label>
+            <input type="time" id="horario" name="horario" required>
+
+            <label for="data">Data:</label>
+            <input type="date" id="data" name="data" required>
+
+            <button type="submit">Agendar</button>
         </form>
     </main>
 
-    <footer>
-        <!-- Seu rodapé original -->
-    </footer>
-
-    <!-- ***APENAS ESTA PARTE FOI ADICIONADA*** -->
-    <!-- Conexão Supabase (única modificação) -->
-    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <!-- Scripts -->
     <script>
-        // Configuração Supabase (use suas credenciais)
+        // Função para atualizar preço
+        document.getElementById('servico').addEventListener('change', function() {
+            const servico = this.options[this.selectedIndex];
+            document.getElementById('preco').value = servico.getAttribute('data-preco') ? 
+                `R$ ${servico.getAttribute('data-preco')}` : '';
+        });
+
+        // Conexão Supabase (substitua pelas suas credenciais)
         const supabaseUrl = 'https://qjygugnuyrkcmammapmf.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...';
+        const supabaseKey = 'sua-chave-real-aqui';
         const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
-        // Função para salvar (adaptada ao seu formulário original)
-        async function salvarAgendamento() {
-            const dados = {
+        // Form submission
+        document.getElementById('form-agendamento').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const agendamento = {
                 nome: document.getElementById('nome').value,
-                email: document.getElementById('email').value,
-                telefone: document.getElementById('telefone').value,
                 servico: document.getElementById('servico').value,
-                data: document.getElementById('data').value + ' ' + document.getElementById('hora').value
+                preco: parseFloat(document.getElementById('preco').value.replace('R$ ', '')),
+                horario: document.getElementById('horario').value,
+                data: document.getElementById('data').value
             };
 
-            const { error } = await supabase
-                .from('agendamentos')
-                .insert([dados]);
-
-            if (error) {
-                alert("Erro: " + error.message);
-            } else {
-                alert("Dados salvos com sucesso!");
-                document.getElementById("form-agendamento").reset();
+            try {
+                const { data, error } = await supabase
+                    .from('agendamentos')
+                    .insert([agendamento]);
+                
+                if (error) throw error;
+                
+                alert('Agendamento salvo com sucesso!');
+                this.reset();
+            } catch (error) {
+                console.error('Erro:', error);
+                alert('Erro ao salvar: ' + error.message);
             }
-        }
+        });
     </script>
 </body>
 </html>
