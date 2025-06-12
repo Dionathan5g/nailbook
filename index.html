@@ -1,81 +1,99 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
-    <title>NailBook - Sistema de Agendamentos</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>NailBook - Agendamentos</title>
     <link rel="stylesheet" href="Css/Css.css">
 </head>
+
 <body>
-    <header class="header-padrao">
+    <header>
         <div class="logo-container">
-            <h1>NailBook - Sistema de Agendamentos</h1>
+            <img src="Imagens/logosite.png" alt="Logo NailBook" class="logo">
+            <h1>NailBook - Agendamentos</h1>
         </div>
-        <nav class="menu-padrao">
+
+        <nav class="menu">
             <ul>
-                <li><a href="index.html" class="active"><i class="fas fa-home"></i> Início</a></li>
-                <li><a href="agendamentos.html"><i class="fas fa-calendar-alt"></i> Agendamentos</a></li>
-                <li><a href="clientes.html"><i class="fas fa-users"></i> Clientes</a></li>
-                <li><a href="relatorios.html"><i class="fas fa-chart-pie"></i> Relatórios</a></li>
-                <li><a href="contato.html"><i class="fas fa-envelope"></i> Fale Conosco</a></li>
+                <li><a href="index.html">Início</a></li>
+                <li><a href="agendamentos.html">Agendamentos</a></li>
+                <li><a href="clientes.html">Clientes</a></li>
+                <li><a href="relatorios.html">Relatórios</a></li>
+                <li><a href="contato.html">Fale Conosco</a></li>
             </ul>
         </nav>
     </header>
 
-    <main class="container-padrao">
-        <section class="painel-bem-vindo">
-            <h2><i class="fas fa-heart"></i> Bem-vindo ao NailBook</h2>
-            <p>O sistema completo para gerenciamento do seu salão</p>
-        </section>
+    <main>
+        <form id="form-agendamento" method="GET">
+            <label for="nome">Nome da Cliente:</label>
+            <input type="text" id="nome" name="nome" required>
 
-        <div class="dashboard-cards">
-            <div class="card-padrao">
-                <h3><i class="fas fa-calendar-alt"></i> Agendamentos</h3>
-                <p>Gerencie seus horários marcados</p>
-                <a href="agendamentos.html" class="botao-padrao">Acessar</a>
-            </div>
-            
-            <div class="card-padrao">
-                <h3><i class="fas fa-users"></i> Clientes</h3>
-                <p>Cadastro completo de clientes</p>
-                <a href="clientes.html" class="botao-padrao">Acessar</a>
-            </div>
-            
-            <div class="card-padrao">
-                <h3><i class="fas fa-chart-pie"></i> Relatórios</h3>
-                <p>Relatórios financeiros</p>
-                <a href="relatorios.html" class="botao-padrao">Acessar</a>
-            </div>
-        </div>
+            <label for="servico">Serviço:</label>
+            <select id="servico" name="servico" required>
+                <option value="">Selecione</option>
+                <option value="Manicure" data-preco="30.00">Manicure - R$ 30,00</option>
+                <option value="Pedicure" data-preco="40.00">Pedicure - R$ 40,00</option>
+                <option value="Unha em Gel" data-preco="70.00">Unha em Gel - R$ 70,00</option>
+                <option value="Francesinha" data-preco="60.00">Francesinha - R$ 60,00</option>
+            </select>
 
-        <section class="form-rapido">
-            <h3><i class="fas fa-plus-circle"></i> Novo Agendamento Rápido</h3>
-            <form id="form-agendamento-rapido">
-                <div class="input-group">
-                    <label for="nome-cliente">Nome:</label>
-                    <input type="text" id="nome-cliente" placeholder="Digite o nome do cliente" required>
-                </div>
-                
-                <div class="input-group">
-                    <label for="servico-rapido">Serviço:</label>
-                    <select id="servico-rapido" required>
-                        <option value="">Selecione...</option>
-                        <option value="Manicure">Manicure</option>
-                        <option value="Pedicure">Pedicure</option>
-                        <option value="Unha em Gel">Unha em Gel</option>
-                        <option value="Francesinha">Francesinha</option>
-                    </select>
-                </div>
+            <label for="preco">Preço:</label>
+            <input type="text" id="preco" name="preco" readonly>
 
-                <button type="submit" class="botao-padrao">
-                    <i class="fas fa-save"></i> Agendar
-                </button>
-            </form>
-        </section>
+            <label for="horario">Horário:</label>
+            <input type="time" id="horario" name="horario" required>
+
+            <label for="data">Data:</label>
+            <input type="date" id="data" name="data" required>
+
+            <button type="submit">Agendar</button>
+        </form>
     </main>
 
-    <footer class="footer-padrao">
-        <p>© 2023 NailBook - Todos os direitos reservados</p>
-    </footer>
+    <script>
+        // Atualiza o preço quando o serviço é selecionado
+        document.getElementById('servico').addEventListener('change', function () {
+            const servicoSelecionado = this.options[this.selectedIndex];
+            const preco = servicoSelecionado.getAttribute('data-preco');
+            document.getElementById('preco').value = preco ? `R$ ${parseFloat(preco).toFixed(2)}` : '';
+        });
+
+        // Processa o formulário
+        document.getElementById('form-agendamento').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const nome = encodeURIComponent(document.getElementById('nome').value);
+            const servico = encodeURIComponent(document.getElementById('servico').value);
+            const preco = encodeURIComponent(document.getElementById('preco').value.replace('R$ ', ''));
+            const horario = encodeURIComponent(document.getElementById('horario').value);
+            const data = encodeURIComponent(document.getElementById('data').value);
+
+            // Salva no localStorage
+            const agendamentos = JSON.parse(localStorage.getItem('agendamentos')) || {};
+            const dataFormatada = decodeURIComponent(data).split('-').reverse().join('-');
+
+            if (!agendamentos[dataFormatada]) {
+                agendamentos[dataFormatada] = [];
+            }
+
+            agendamentos[dataFormatada].push({
+                nome: decodeURIComponent(nome),
+                servico: decodeURIComponent(servico),
+                preco: parseFloat(preco),
+                horario: decodeURIComponent(horario)
+            });
+
+            localStorage.setItem('agendamentos', JSON.stringify(agendamentos));
+
+            // Mensagem de sucesso
+            alert("✅ Agendamento realizado com sucesso!");
+
+            // Redirecionamento
+            window.location.href = "index.html";
+        });
+    </script>
 </body>
+
 </html>
