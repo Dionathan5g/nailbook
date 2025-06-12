@@ -4,92 +4,267 @@
     <meta charset="UTF-8">
     <title>NailBook - Relatórios</title>
     <link rel="stylesheet" href="Css/Css.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <header>
+    <header class="header-padrao">
         <div class="logo-container">
-            <img src="Imagens/logosite.png" alt="Logo NailBook" class="logo">
             <h1>NailBook - Relatórios</h1>
         </div>
-
-        <nav class="menu">
+        <nav class="menu-padrao">
             <ul>
-                <li><a href="index.html">Início</a></li>
-                <li><a href="agendamentos.html">Agendamentos</a></li>
-                <li><a href="clientes.html">Clientes</a></li>
-                <li><a href="relatorios.html">Relatórios</a></li>
-                <li><a href="contato.html">Fale Conosco</a></li>
+                <li><a href="index.html"><i class="fas fa-home"></i> Início</a></li>
+                <li><a href="agendamentos.html"><i class="fas fa-calendar-alt"></i> Agendamentos</a></li>
+                <li><a href="clientes.html"><i class="fas fa-users"></i> Clientes</a></li>
+                <li><a href="relatorios.html" class="active"><i class="fas fa-chart-pie"></i> Relatórios</a></li>
+                <li><a href="contato.html"><i class="fas fa-envelope"></i> Fale Conosco</a></li>
             </ul>
         </nav>
     </header>
 
-    <main>
-        <h2>Relatório Mensal</h2>
-        <form id="form-relatorio">
-            <label for="mes">Mês:</label>
-            <select id="mes" name="mes">
-                <option value="01">Janeiro</option>
-                <option value="02">Fevereiro</option>
-                <option value="03">Março</option>
-                <option value="04">Abril</option>
-                <option value="05">Maio</option>
-                <option value="06">Junho</option>
-                <option value="07">Julho</option>
-                <option value="08">Agosto</option>
-                <option value="09">Setembro</option>
-                <option value="10">Outubro</option>
-                <option value="11">Novembro</option>
-                <option value="12">Dezembro</option>
-            </select>
-
-            <label for="ano">Ano:</label>
-            <input type="number" id="ano" name="ano" min="2023" max="2030" value="2023">
-
-            <button type="button" id="gerar-relatorio">Gerar Relatório</button>
-        </form>
-
-        <div id="resultado-relatorio">
-            <h3>Resumo do Mês</h3>
-            <div id="resumo-mes">
-                <p>Total de serviços: <span id="total-servicos">0</span></p>
-                <p>Faturamento total: R$ <span id="faturamento-total">0,00</span></p>
+    <main class="container-padrao">
+        <section class="secao-relatorios">
+            <h2><i class="fas fa-chart-line"></i> Relatórios Financeiros</h2>
+            
+            <div class="filtros-relatorio">
+                <div class="input-group">
+                    <label for="data-inicio">Data Início:</label>
+                    <input type="date" id="data-inicio">
+                </div>
+                
+                <div class="input-group">
+                    <label for="data-fim">Data Fim:</label>
+                    <input type="date" id="data-fim">
+                </div>
+                
+                <button id="btn-filtrar" class="botao-padrao">
+                    <i class="fas fa-filter"></i> Filtrar
+                </button>
             </div>
-
-            <h3>Detalhamento por Serviço</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Serviço</th>
-                        <th>Quantidade</th>
-                        <th>Total</th>
-                    </tr>
-                </thead>
-                <tbody id="detalhes-servicos">
-                    <!-- Os dados serão preenchidos via JavaScript -->
-                </tbody>
-            </table>
-        </div>
+            
+            <div class="cards-relatorios">
+                <div class="card-relatorio">
+                    <h3><i class="fas fa-money-bill-wave"></i> Total Arrecadado</h3>
+                    <p class="valor" id="total-arrecadado">R$ 0,00</p>
+                    <p class="periodo">Período selecionado</p>
+                </div>
+                
+                <div class="card-relatorio">
+                    <h3><i class="fas fa-calendar-check"></i> Serviços Realizados</h3>
+                    <p class="valor" id="total-servicos">0</p>
+                    <p class="periodo">Período selecionado</p>
+                </div>
+                
+                <div class="card-relatorio">
+                    <h3><i class="fas fa-user-friends"></i> Clientes Atendidos</h3>
+                    <p class="valor" id="total-clientes">0</p>
+                    <p class="periodo">Período selecionado</p>
+                </div>
+            </div>
+            
+            <div class="graficos">
+                <div class="grafico-container">
+                    <h3><i class="fas fa-chart-pie"></i> Serviços Mais Populares</h3>
+                    <canvas id="grafico-servicos"></canvas>
+                </div>
+                
+                <div class="grafico-container">
+                    <h3><i class="fas fa-chart-bar"></i> Faturamento Mensal</h3>
+                    <canvas id="grafico-mensal"></canvas>
+                </div>
+            </div>
+            
+            <div class="tabela-relatorio">
+                <h3><i class="fas fa-table"></i> Detalhes dos Agendamentos</h3>
+                <table id="tabela-agendamentos">
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Cliente</th>
+                            <th>Serviço</th>
+                            <th>Valor</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Dados serão inseridos via JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
     </main>
 
-    <!-- Loader -->
-    <div class="loader">
-        <div class="spinner"></div>
-    </div>
+    <footer class="footer-padrao">
+        <p>© 2023 NailBook - Todos os direitos reservados</p>
+    </footer>
 
-    <script src="Java/relatorios.js"></script>
+    <!-- Conexão com Supabase -->
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script>
-        // Animação para os resultados do relatório
-        document.getElementById('gerar-relatorio').addEventListener('click', function() {
-            const resultado = document.getElementById('resultado-relatorio');
-            resultado.style.opacity = '0';
-            resultado.style.transform = 'translateY(20px)';
+        // Configuração do Supabase (substitua pelas suas credenciais)
+        const supabaseUrl = 'https://qjygugnuyrkcmammapmf.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...';
+        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+        
+        // Variáveis globais
+        let agendamentos = [];
+        let graficoServicos, graficoMensal;
+        
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Configura datas padrão (últimos 30 dias)
+            const dataFim = new Date();
+            const dataInicio = new Date();
+            dataInicio.setDate(dataInicio.getDate() - 30);
             
-            setTimeout(() => {
-                resultado.style.transition = 'all 0.5s ease';
-                resultado.style.opacity = '1';
-                resultado.style.transform = 'translateY(0)';
-            }, 300);
+            document.getElementById('data-inicio').valueAsDate = dataInicio;
+            document.getElementById('data-fim').valueAsDate = dataFim;
+            
+            // Carrega dados
+            await carregarDados(dataInicio, dataFim);
+            
+            // Configura evento do botão
+            document.getElementById('btn-filtrar').addEventListener('click', async () => {
+                const inicio = new Date(document.getElementById('data-inicio').value);
+                const fim = new Date(document.getElementById('data-fim').value);
+                await carregarDados(inicio, fim);
+            });
         });
+        
+        // Função principal para carregar e processar dados
+        async function carregarDados(dataInicio, dataFim) {
+            try {
+                // Ajusta data fim para incluir o dia inteiro
+                dataFim.setHours(23, 59, 59, 999);
+                
+                // Busca agendamentos no período
+                const { data, error } = await supabase
+                    .from('agendamentos')
+                    .select('*')
+                    .gte('data', dataInicio.toISOString())
+                    .lte('data', dataFim.toISOString());
+                
+                if (error) throw error;
+                
+                agendamentos = data || [];
+                
+                // Atualiza a UI
+                atualizarResumo();
+                atualizarTabela();
+                atualizarGraficos();
+                
+            } catch (error) {
+                console.error('Erro ao carregar dados:', error);
+                alert('Erro ao carregar dados: ' + error.message);
+            }
+        }
+        
+        function atualizarResumo() {
+            // Calcula totais
+            const totalArrecadado = agendamentos.reduce((sum, item) => sum + (item.preco || 0), 0);
+            const servicosUnicos = [...new Set(agendamentos.map(item => item.servico))];
+            const clientesUnicos = [...new Set(agendamentos.map(item => item.nome))];
+            
+            // Atualiza os cards
+            document.getElementById('total-arrecadado').textContent = 
+                `R$ ${totalArrecadado.toFixed(2).replace('.', ',')}`;
+            document.getElementById('total-servicos').textContent = agendamentos.length;
+            document.getElementById('total-clientes').textContent = clientesUnicos.length;
+        }
+        
+        function atualizarTabela() {
+            const tbody = document.querySelector('#tabela-agendamentos tbody');
+            tbody.innerHTML = '';
+            
+            agendamentos.forEach(agendamento => {
+                const tr = document.createElement('tr');
+                
+                const data = new Date(agendamento.data);
+                const dataFormatada = data.toLocaleDateString('pt-BR');
+                
+                tr.innerHTML = `
+                    <td>${dataFormatada}</td>
+                    <td>${agendamento.nome || 'Não informado'}</td>
+                    <td>${agendamento.servico || 'Não especificado'}</td>
+                    <td>R$ ${(agendamento.preco || 0).toFixed(2).replace('.', ',')}</td>
+                `;
+                
+                tbody.appendChild(tr);
+            });
+        }
+        
+        function atualizarGraficos() {
+            // Dados para gráfico de serviços
+            const servicosCount = {};
+            agendamentos.forEach(item => {
+                servicosCount[item.servico] = (servicosCount[item.servico] || 0) + 1;
+            });
+            
+            // Dados para gráfico mensal
+            const meses = {};
+            agendamentos.forEach(item => {
+                const data = new Date(item.data);
+                const mesAno = `${data.getMonth() + 1}/${data.getFullYear()}`;
+                
+                if (!meses[mesAno]) {
+                    meses[mesAno] = { total: 0, count: 0 };
+                }
+                
+                meses[mesAno].total += item.preco || 0;
+                meses[mesAno].count += 1;
+            });
+            
+            // Destrói gráficos existentes
+            if (graficoServicos) graficoServicos.destroy();
+            if (graficoMensal) graficoMensal.destroy();
+            
+            // Gráfico de serviços (Pizza)
+            const ctxServicos = document.getElementById('grafico-servicos').getContext('2d');
+            graficoServicos = new Chart(ctxServicos, {
+                type: 'pie',
+                data: {
+                    labels: Object.keys(servicosCount),
+                    datasets: [{
+                        data: Object.values(servicosCount),
+                        backgroundColor: [
+                            '#ff6b98', '#ff8fab', '#ffb3c6', '#ffd7e0', '#d8bfd8'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                        }
+                    }
+                }
+            });
+            
+            // Gráfico mensal (Barras)
+            const ctxMensal = document.getElementById('grafico-mensal').getContext('2d');
+            graficoMensal = new Chart(ctxMensal, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(meses),
+                    datasets: [{
+                        label: 'Faturamento (R$)',
+                        data: Object.values(meses).map(m => m.total),
+                        backgroundColor: '#ff6b98',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
     </script>
 </body>
 </html>
