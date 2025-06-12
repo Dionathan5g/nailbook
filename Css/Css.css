@@ -20,7 +20,91 @@ body {
     color: var(--cor-texto);
     animation: fadeIn 0.5s ease-out;
 }
+/* ADICIONE ESTES ESTILOS AO SEU ARQUIVO CSS */
 
+/* ESTILOS ESPECÍFICOS PARA A TABELA DE AGENDAMENTOS */
+#lista-agendamentos table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+#lista-agendamentos th {
+    background-color: var(--cor-primaria);
+    color: white;
+    padding: 12px 15px;
+    text-align: left;
+    font-weight: 600;
+    position: sticky;
+    top: 0;
+}
+
+#lista-agendamentos td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #eee;
+    color: #333; /* Cor mais escura para melhor legibilidade */
+    font-weight: 500;
+}
+
+#lista-agendamentos tr:nth-child(even) {
+    background-color: #faf9ff;
+}
+
+#lista-agendamentos tr:hover {
+    background-color: #f0ebff;
+}
+
+#lista-agendamentos tr:last-child td {
+    border-bottom: none;
+}
+
+/* MELHORIAS PARA OS FILTROS */
+.filters {
+    background-color: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    margin-bottom: 20px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.filters label {
+    font-weight: 600;
+    color: var(--cor-primaria);
+    margin-right: 5px;
+}
+
+.filters input {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    min-width: 180px;
+}
+
+.filters button {
+    padding: 8px 16px;
+    background-color: var(--cor-primaria);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-weight: 500;
+}
+
+.filters button:hover {
+    background-color: var(--cor-secundaria);
+    transform: translateY(-1px);
+}
+
+.filters button:active {
+    transform: translateY(0);
+}
 /* TOPO E LOGO */
 header {
     background-color: var(--cor-primaria);
