@@ -1,49 +1,344 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <title>NailBook - Clientes</title>
-  <link rel="stylesheet" href="Css/Css.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <meta charset="UTF-8">
+    <title>NailBook - Clientes</title>
+    <link rel="stylesheet" href="Css/Css.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-  <header class="header-padrao">
-    <div class="logo-container">
-      <img src="imagens/logosite.png" alt="Logo NailBook" class="logo">
-      <h1>NailBook - Clientes</h1>
-    </div>
-    <nav class="menu-padrao">
-      <ul>
-        <li><a href="index.html"><i class="fas fa-home"></i> Início</a></li>
-        <li><a href="agendamentos.html"><i class="fas fa-calendar-alt"></i> Agendamentos</a></li>
-        <li><a href="clientes.html" class="active"><i class="fas fa-users"></i> Clientes</a></li>
-        <li><a href="relatorios.html"><i class="fas fa-chart-pie"></i> Relatórios</a></li>
-        <li><a href="contato.html"><i class="fas fa-envelope"></i> Contato</a></li>
-      </ul>
-    </nav>
-  </header>
+    <header class="header-padrao">
+        <div class="logo-container">
+            <img src="imagens/logosite.png" alt="Logo NailBook" class="logo">
+            <h1>NailBook - Clientes</h1>
+        </div>
+        <nav class="menu-padrao">
+            <ul>
+                <li><a href="index.html"><i class="fas fa-home"></i> Início</a></li>
+                <li><a href="agendamentos.html"><i class="fas fa-calendar-alt"></i> Agendamentos</a></li>
+                <li><a href="clientes.html" class="active"><i class="fas fa-users"></i> Clientes</a></li>
+                <li><a href="relatorios.html"><i class="fas fa-chart-pie"></i> Relatórios</a></li>
+                <li><a href="contato.html"><i class="fas fa-envelope"></i> Fale Conosco</a></li>
+            </ul>
+        </nav>
+    </header>
 
-  <main class="conteudo">
-    <h2>Lista de Clientes Agendados</h2>
-    <div class="tabela-container">
-      <table class="tabela-padrao">
-        <thead>
-          <tr>
-            <th>Data</th>
-            <th>Nome</th>
-            <th>Serviço</th>
-            <th>Valor (R$)</th>
-            <th>Status</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-        <tbody id="lista-clientes">
-          <!-- Linhas adicionadas dinamicamente por JS -->
-        </tbody>
-      </table>
-    </div>
-  </main>
+    <main class="container-padrao">
+        <section class="secao-padrao">
+            <h2><i class="fas fa-users"></i> Gerenciamento de Clientes</h2>
+            
+            <div class="controles-padrao">
+                <div class="busca-padrao">
+                    <input type="text" id="busca-cliente" placeholder="Buscar cliente...">
+                    <button id="btn-buscar" class="botao-icone">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+                <button id="btn-novo-cliente" class="botao-padrao">
+                    <i class="fas fa-plus"></i> Novo Cliente
+                </button>
+            </div>
+            
+            <div class="tabela-container">
+                <table class="tabela-padrao" id="tabela-clientes">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Telefone</th>
+                            <th>Última Visita</th>
+                            <th>Total de Serviços</th>
+                            <th>Status</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Dados serão carregados via JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
 
-  <script src="js/clientes.js"></script>
+        <!-- Modal para Novo/Editar Cliente -->
+        <div id="modal-cliente" class="modal">
+            <div class="modal-conteudo">
+                <div class="modal-cabecalho">
+                    <h3 id="titulo-modal"><i class="fas fa-user-edit"></i> Novo Cliente</h3>
+                    <span class="fechar-modal">&times;</span>
+                </div>
+                <form id="form-cliente" class="form-padrao">
+                    <input type="hidden" id="cliente-id">
+                    
+                    <div class="grupo-input">
+                        <label for="cliente-nome">Nome Completo:</label>
+                        <input type="text" id="cliente-nome" required>
+                    </div>
+                    
+                    <div class="grupo-input">
+                        <label for="cliente-telefone">Telefone:</label>
+                        <input type="tel" id="cliente-telefone" required>
+                    </div>
+                    
+                    <div class="grupo-input">
+                        <label for="cliente-email">E-mail:</label>
+                        <input type="email" id="cliente-email">
+                    </div>
+                    
+                    <div class="grupo-input">
+                        <label for="cliente-aniversario">Data de Nascimento:</label>
+                        <input type="date" id="cliente-aniversario">
+                    </div>
+                    
+                    <div class="modal-rodape">
+                        <button type="button" class="botao-secundario fechar-modal-btn">Cancelar</button>
+                        <button type="submit" class="botao-padrao">
+                            <i class="fas fa-save"></i> Salvar Cliente
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer-padrao">
+        <p>© 2023 NailBook - Todos os direitos reservados</p>
+    </footer>
+
+    <!-- Conexão com Supabase -->
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script>
+        // Configuração do Supabase
+        const supabaseUrl = 'https://qjygugnuyrkcmammapmf.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...';
+        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+        
+        // Variáveis globais
+        let clientes = [];
+        let modal = document.getElementById("modal-cliente");
+        
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', async () => {
+            await carregarClientes();
+            
+            // Evento do botão novo cliente
+            document.getElementById('btn-novo-cliente').addEventListener('click', () => {
+                abrirModal();
+            });
+            
+            // Evento do botão fechar modal
+            document.querySelectorAll('.fechar-modal, .fechar-modal-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    modal.style.display = "none";
+                });
+            });
+            
+            // Evento para fechar modal clicando fora
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
+            
+            // Evento do formulário
+            document.getElementById('form-cliente').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                await salvarCliente();
+            });
+            
+            // Evento de busca
+            document.getElementById('btn-buscar').addEventListener('click', async () => {
+                await buscarClientes();
+            });
+            
+            document.getElementById('busca-cliente').addEventListener('keypress', async (e) => {
+                if (e.key === 'Enter') {
+                    await buscarClientes();
+                }
+            });
+        });
+        
+        async function carregarClientes() {
+            try {
+                const { data, error } = await supabase
+                    .from('clientes')
+                    .select('*')
+                    .order('nome', { ascending: true });
+                
+                if (error) throw error;
+                
+                clientes = data || [];
+                atualizarTabela();
+                
+            } catch (error) {
+                console.error('Erro ao carregar clientes:', error);
+                alert('Erro ao carregar clientes: ' + error.message);
+            }
+        }
+        
+        async function buscarClientes() {
+            const termo = document.getElementById('busca-cliente').value.toLowerCase();
+            
+            if (!termo) {
+                await carregarClientes();
+                return;
+            }
+            
+            try {
+                const { data, error } = await supabase
+                    .from('clientes')
+                    .select('*')
+                    .ilike('nome', `%${termo}%`);
+                
+                if (error) throw error;
+                
+                clientes = data || [];
+                atualizarTabela();
+                
+            } catch (error) {
+                console.error('Erro ao buscar clientes:', error);
+                alert('Erro ao buscar clientes: ' + error.message);
+            }
+        }
+        
+        function atualizarTabela() {
+            const tbody = document.querySelector('#tabela-clientes tbody');
+            tbody.innerHTML = '';
+            
+            clientes.forEach(cliente => {
+                const tr = document.createElement('tr');
+                
+                // Formata a data de aniversário
+                const aniversario = cliente.aniversario ? 
+                    new Date(cliente.aniversario).toLocaleDateString('pt-BR') : 'Não informado';
+                
+                // Formata a última visita
+                const ultimaVisita = cliente.ultima_visita ? 
+                    new Date(cliente.ultima_visita).toLocaleDateString('pt-BR') : 'Nunca visitou';
+                
+                tr.innerHTML = `
+                    <td>${cliente.nome}</td>
+                    <td>${cliente.telefone || 'Não informado'}</td>
+                    <td>${ultimaVisita}</td>
+                    <td>${cliente.total_servicos || 0}</td>
+                    <td>
+                        <span class="status ${cliente.ativo ? 'ativo' : 'inativo'}">
+                            ${cliente.ativo ? 'Ativo' : 'Inativo'}
+                        </span>
+                    </td>
+                    <td class="acoes">
+                        <button class="botao-icone editar" data-id="${cliente.id}" title="Editar">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="botao-icone ${cliente.ativo ? 'desativar' : 'ativar'}" 
+                                data-id="${cliente.id}" 
+                                title="${cliente.ativo ? 'Desativar' : 'Ativar'}">
+                            <i class="fas fa-${cliente.ativo ? 'times' : 'check'}"></i>
+                        </button>
+                    </td>
+                `;
+                
+                tbody.appendChild(tr);
+            });
+            
+            // Adiciona eventos aos botões
+            document.querySelectorAll('.botao-icone.editar').forEach(btn => {
+                btn.addEventListener('click', () => editarCliente(btn.dataset.id));
+            });
+            
+            document.querySelectorAll('.botao-icone.ativar, .botao-icone.desativar').forEach(btn => {
+                btn.addEventListener('click', () => toggleStatusCliente(btn.dataset.id));
+            });
+        }
+        
+        function abrirModal(cliente = null) {
+            const form = document.getElementById('form-cliente');
+            const titulo = document.getElementById('titulo-modal');
+            
+            if (cliente) {
+                titulo.innerHTML = '<i class="fas fa-user-edit"></i> Editar Cliente';
+                document.getElementById('cliente-id').value = cliente.id;
+                document.getElementById('cliente-nome').value = cliente.nome;
+                document.getElementById('cliente-telefone').value = cliente.telefone || '';
+                document.getElementById('cliente-email').value = cliente.email || '';
+                document.getElementById('cliente-aniversario').value = cliente.aniversario || '';
+            } else {
+                titulo.innerHTML = '<i class="fas fa-user-plus"></i> Novo Cliente';
+                form.reset();
+                document.getElementById('cliente-id').value = '';
+            }
+            
+            modal.style.display = "block";
+        }
+        
+        async function editarCliente(id) {
+            const cliente = clientes.find(c => c.id == id);
+            if (cliente) abrirModal(cliente);
+        }
+        
+        async function salvarCliente() {
+            const id = document.getElementById('cliente-id').value;
+            const cliente = {
+                nome: document.getElementById('cliente-nome').value,
+                telefone: document.getElementById('cliente-telefone').value,
+                email: document.getElementById('cliente-email').value,
+                aniversario: document.getElementById('cliente-aniversario').value,
+                ativo: true
+            };
+            
+            try {
+                if (id) {
+                    // Atualiza cliente existente
+                    const { error } = await supabase
+                        .from('clientes')
+                        .update(cliente)
+                        .eq('id', id);
+                    
+                    if (error) throw error;
+                    
+                    alert('Cliente atualizado com sucesso!');
+                } else {
+                    // Cria novo cliente
+                    const { error } = await supabase
+                        .from('clientes')
+                        .insert([cliente]);
+                    
+                    if (error) throw error;
+                    
+                    alert('Cliente cadastrado com sucesso!');
+                }
+                
+                modal.style.display = "none";
+                await carregarClientes();
+                
+            } catch (error) {
+                console.error('Erro ao salvar cliente:', error);
+                alert('Erro ao salvar cliente: ' + error.message);
+            }
+        }
+        
+        async function toggleStatusCliente(id) {
+            const cliente = clientes.find(c => c.id == id);
+            if (!cliente) return;
+            
+            const novoStatus = !cliente.ativo;
+            const confirmacao = confirm(`Deseja realmente ${novoStatus ? 'ativar' : 'desativar'} este cliente?`);
+            
+            if (!confirmacao) return;
+            
+            try {
+                const { error } = await supabase
+                    .from('clientes')
+                    .update({ ativo: novoStatus })
+                    .eq('id', id);
+                
+                if (error) throw error;
+                
+                await carregarClientes();
+                
+            } catch (error) {
+                console.error('Erro ao alterar status:', error);
+                alert('Erro ao alterar status: ' + error.message);
+            }
+        }
+    </script>
 </body>
 </html>
