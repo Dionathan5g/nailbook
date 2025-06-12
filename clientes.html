@@ -5,6 +5,165 @@
     <title>NailBook - Clientes</title>
     <link rel="stylesheet" href="Css/Css.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* ESTILOS PARA OS RADIO BUTTONS */
+        .status-options {
+            display: flex;
+            gap: 20px;
+            margin-top: 8px;
+        }
+        
+        .status-option {
+            position: relative;
+            padding-left: 30px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            height: 24px;
+        }
+        
+        .status-option input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+        }
+        
+        .status-checkmark {
+            position: absolute;
+            left: 0;
+            height: 20px;
+            width: 20px;
+            background-color: #f5f5f5;
+            border-radius: 50%;
+            border: 2px solid #ddd;
+            transition: all 0.3s;
+        }
+        
+        .status-option:hover .status-checkmark {
+            border-color: #ff6b98;
+        }
+        
+        .status-option input:checked ~ .status-checkmark {
+            background-color: #ff6b98;
+            border-color: #ff6b98;
+        }
+        
+        .status-checkmark:after {
+            content: "";
+            position: absolute;
+            display: none;
+            top: 4px;
+            left: 4px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: white;
+        }
+        
+        .status-option input:checked ~ .status-checkmark:after {
+            display: block;
+        }
+        
+        /* ESTILOS PARA A TABELA */
+        .status-badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            display: inline-block;
+        }
+        
+        .status-badge.active {
+            background-color: #e3f7e8;
+            color: #2e7d32;
+        }
+        
+        .status-badge.inactive {
+            background-color: #ffebee;
+            color: #c62828;
+        }
+        
+        .action-btn {
+            background: none;
+            border: none;
+            color: #555;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 0 5px;
+            transition: color 0.3s;
+        }
+        
+        .action-btn:hover {
+            color: #ff6b98;
+        }
+        
+        /* ESTILOS GERAIS */
+        .form-section, .list-section {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #555;
+        }
+        
+        input[type="text"],
+        input[type="tel"],
+        input[type="email"],
+        input[type="date"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        .botao-padrao {
+            background: #ff6b98;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+        
+        .botao-padrao:hover {
+            background: #ff8fab;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        th {
+            background: #ff6b98;
+            color: white;
+        }
+        
+        tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+    </style>
 </head>
 <body>
     <header class="header-padrao">
@@ -28,43 +187,39 @@
         <section class="form-section">
             <h2><i class="fas fa-user-plus"></i> Cadastrar Novo Cliente</h2>
             
-            <form id="form-cliente" class="form-padrao">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="cliente-nome">Nome Completo</label>
-                        <input type="text" id="cliente-nome" class="input-padrao" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="cliente-telefone">Telefone</label>
-                        <input type="tel" id="cliente-telefone" class="input-padrao" required>
-                    </div>
+            <form id="form-cliente">
+                <div class="form-group">
+                    <label for="cliente-nome">Nome Completo</label>
+                    <input type="text" id="cliente-nome" placeholder="Digite o nome completo" required>
                 </div>
                 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="cliente-email">E-mail</label>
-                        <input type="email" id="cliente-email" class="input-padrao">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="cliente-aniversario">Data Nascimento</label>
-                        <input type="date" id="cliente-aniversario" class="input-padrao">
-                    </div>
+                <div class="form-group">
+                    <label for="cliente-telefone">Telefone</label>
+                    <input type="tel" id="cliente-telefone" placeholder="(00) 00000-0000" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="cliente-email">E-mail</label>
+                    <input type="email" id="cliente-email" placeholder="cliente@exemplo.com">
+                </div>
+                
+                <div class="form-group">
+                    <label for="cliente-aniversario">Data de Nascimento</label>
+                    <input type="date" id="cliente-aniversario">
                 </div>
                 
                 <div class="form-group">
                     <label>Status do Cliente</label>
-                    <div class="radio-group">
-                        <label class="radio-option">
-                            <input type="radio" name="status" value="ativo" checked>
-                            <span class="radio-checkmark"></span>
+                    <div class="status-options">
+                        <label class="status-option">
                             Ativo
+                            <input type="radio" name="status" value="ativo" checked>
+                            <span class="status-checkmark"></span>
                         </label>
-                        <label class="radio-option">
-                            <input type="radio" name="status" value="inativo">
-                            <span class="radio-checkmark"></span>
+                        <label class="status-option">
                             Inativo
+                            <input type="radio" name="status" value="inativo">
+                            <span class="status-checkmark"></span>
                         </label>
                     </div>
                 </div>
@@ -77,27 +232,21 @@
 
         <!-- Seção de Listagem -->
         <section class="list-section">
-            <h2><i class="fas fa-list-ul"></i> Lista de Clientes</h2>
-            
-            <div class="search-box">
-                <input type="text" id="busca-cliente" placeholder="Pesquisar cliente..." class="search-input">
-                <button id="btn-buscar" class="search-button">
-                    <i class="fas fa-search"></i>
-                </button>
-            </div>
+            <h2><i class="fas fa-list-ul"></i> Clientes Cadastrados</h2>
             
             <div class="table-responsive">
-                <table id="tabela-clientes" class="client-table">
+                <table id="tabela-clientes">
                     <thead>
                         <tr>
                             <th>Nome</th>
                             <th>Contato</th>
+                            <th>Nascimento</th>
                             <th>Status</th>
                             <th>Ações</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <!-- Dados serão preenchidos via JavaScript -->
+                    <tbody id="clientes-body">
+                        <!-- Clientes serão inseridos aqui via JavaScript -->
                     </tbody>
                 </table>
             </div>
@@ -108,143 +257,143 @@
         <p>© 2023 NailBook - Todos os direitos reservados</p>
     </footer>
 
-    <!-- Scripts -->
-    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script>
-        // Configuração do Supabase
-        const supabaseUrl = 'https://qjygugnuyrkcmammapmf.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...';
-        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
-        
-        // Carrega clientes ao iniciar
-        document.addEventListener('DOMContentLoaded', async () => {
-            await loadClientes();
+        // Banco de dados temporário (simulando o Supabase)
+        let clientesDB = [];
+        let currentId = 1;
+
+        // Carregar dados quando a página é aberta
+        document.addEventListener('DOMContentLoaded', () => {
+            carregarClientes();
             
-            // Configura eventos
-            document.getElementById('form-cliente').addEventListener('submit', handleSubmit);
-            document.getElementById('btn-buscar').addEventListener('click', searchClientes);
+            // Configurar evento do formulário
+            document.getElementById('form-cliente').addEventListener('submit', (e) => {
+                e.preventDefault();
+                cadastrarCliente();
+            });
         });
 
-        // Carrega lista de clientes
-        async function loadClientes() {
-            try {
-                const { data, error } = await supabase
-                    .from('clientes')
-                    .select('*')
-                    .order('nome', { ascending: true });
-                
-                if (error) throw error;
-                
-                renderClientes(data || []);
-            } catch (error) {
-                console.error("Erro ao carregar clientes:", error);
-                alert("Erro ao carregar clientes");
-            }
+        // Função para cadastrar novo cliente
+        function cadastrarCliente() {
+            const nome = document.getElementById('cliente-nome').value;
+            const telefone = document.getElementById('cliente-telefone').value;
+            const email = document.getElementById('cliente-email').value;
+            const aniversario = document.getElementById('cliente-aniversario').value;
+            const status = document.querySelector('input[name="status"]:checked').value;
+            
+            // Criar objeto do cliente
+            const novoCliente = {
+                id: currentId++,
+                nome,
+                telefone,
+                email,
+                aniversario,
+                status: status === 'ativo'
+            };
+            
+            // Adicionar ao banco de dados
+            clientesDB.push(novoCliente);
+            
+            // Atualizar a tabela
+            atualizarTabela();
+            
+            // Limpar formulário
+            document.getElementById('form-cliente').reset();
+            document.querySelector('input[name="status"][value="ativo"]').checked = true;
+            
+            // Feedback visual
+            alert('Cliente cadastrado com sucesso!');
         }
 
-        // Renderiza clientes na tabela
-        function renderClientes(clientes) {
-            const tbody = document.querySelector('#tabela-clientes tbody');
+        // Função para carregar clientes (simulando carregamento inicial)
+        function carregarClientes() {
+            // Dados iniciais de exemplo
+            clientesDB = [
+                {
+                    id: currentId++,
+                    nome: "Maria Silva",
+                    telefone: "(11) 9876-5432",
+                    email: "maria@exemplo.com",
+                    aniversario: "1985-05-15",
+                    status: true
+                },
+                {
+                    id: currentId++,
+                    nome: "João Santos",
+                    telefone: "(21) 9987-6543",
+                    email: "joao@exemplo.com",
+                    aniversario: "1990-08-22",
+                    status: false
+                }
+            ];
+            
+            atualizarTabela();
+        }
+
+        // Função para atualizar a tabela de clientes
+        function atualizarTabela() {
+            const tbody = document.getElementById('clientes-body');
             tbody.innerHTML = '';
             
-            clientes.forEach(cliente => {
+            clientesDB.forEach(cliente => {
                 const tr = document.createElement('tr');
+                
+                // Formatar data de nascimento
+                const dataNasc = cliente.aniversario ? 
+                    new Date(cliente.aniversario).toLocaleDateString('pt-BR') : 'Não informado';
+                
                 tr.innerHTML = `
-                    <td>${cliente.nome || '-'}</td>
+                    <td>${cliente.nome}</td>
                     <td>
-                        <div>${cliente.telefone || '-'}</div>
-                        <small>${cliente.email || ''}</small>
+                        <div>${cliente.telefone}</div>
+                        ${cliente.email ? `<small>${cliente.email}</small>` : ''}
                     </td>
+                    <td>${dataNasc}</td>
                     <td>
-                        <span class="status-badge ${cliente.ativo ? 'active' : 'inactive'}">
-                            ${cliente.ativo ? 'Ativo' : 'Inativo'}
+                        <span class="status-badge ${cliente.status ? 'active' : 'inactive'}">
+                            ${cliente.status ? 'Ativo' : 'Inativo'}
                         </span>
                     </td>
-                    <td class="actions">
-                        <button class="action-btn edit" data-id="${cliente.id}">
+                    <td>
+                        <button class="action-btn" onclick="editarCliente(${cliente.id})">
                             <i class="fas fa-edit"></i>
                         </button>
-                        <button class="action-btn ${cliente.ativo ? 'deactivate' : 'activate'}" 
-                                data-id="${cliente.id}">
-                            <i class="fas fa-${cliente.ativo ? 'times' : 'check'}"></i>
+                        <button class="action-btn" onclick="alternarStatus(${cliente.id})">
+                            <i class="fas fa-${cliente.status ? 'times' : 'check'}"></i>
                         </button>
                     </td>
                 `;
+                
                 tbody.appendChild(tr);
             });
-            
-            // Adiciona eventos aos botões
-            setupActionButtons();
         }
 
-        // Configura eventos dos botões de ação
-        function setupActionButtons() {
-            document.querySelectorAll('.action-btn.edit').forEach(btn => {
-                btn.addEventListener('click', () => editCliente(btn.dataset.id));
-            });
+        // Função para editar cliente
+        function editarCliente(id) {
+            const cliente = clientesDB.find(c => c.id === id);
+            if (!cliente) return;
             
-            document.querySelectorAll('.action-btn.activate, .action-btn.deactivate').forEach(btn => {
-                btn.addEventListener('click', () => toggleClienteStatus(btn.dataset.id));
-            });
+            // Preencher formulário com dados do cliente
+            document.getElementById('cliente-nome').value = cliente.nome;
+            document.getElementById('cliente-telefone').value = cliente.telefone;
+            document.getElementById('cliente-email').value = cliente.email || '';
+            document.getElementById('cliente-aniversario').value = cliente.aniversario || '';
+            document.querySelector(`input[name="status"][value="${cliente.status ? 'ativo' : 'inativo'}"]`).checked = true;
+            
+            // Remover o cliente da lista (para atualização)
+            clientesDB = clientesDB.filter(c => c.id !== id);
+            
+            // Rolagem suave até o formulário
+            document.querySelector('.form-section').scrollIntoView({ behavior: 'smooth' });
         }
 
-        // Manipula envio do formulário
-        async function handleSubmit(e) {
-            e.preventDefault();
+        // Função para alternar status do cliente
+        function alternarStatus(id) {
+            const clienteIndex = clientesDB.findIndex(c => c.id === id);
+            if (clienteIndex === -1) return;
             
-            const clienteData = {
-                nome: document.getElementById('cliente-nome').value,
-                telefone: document.getElementById('cliente-telefone').value,
-                email: document.getElementById('cliente-email').value,
-                aniversario: document.getElementById('cliente-aniversario').value,
-                ativo: document.querySelector('input[name="status"]:checked').value === 'ativo'
-            };
-            
-            try {
-                const { error } = await supabase
-                    .from('clientes')
-                    .upsert([clienteData]);
-                
-                if (error) throw error;
-                
-                alert('Cliente salvo com sucesso!');
-                document.getElementById('form-cliente').reset();
-                await loadClientes();
-            } catch (error) {
-                console.error("Erro ao salvar cliente:", error);
-                alert("Erro ao salvar cliente");
-            }
-        }
-
-        // Pesquisa clientes
-        async function searchClientes() {
-            const termo = document.getElementById('busca-cliente').value.trim();
-            if (!termo) return await loadClientes();
-            
-            try {
-                const { data, error } = await supabase
-                    .from('clientes')
-                    .select('*')
-                    .ilike('nome', `%${termo}%`);
-                
-                if (error) throw error;
-                
-                renderClientes(data || []);
-            } catch (error) {
-                console.error("Erro ao buscar clientes:", error);
-            }
-        }
-
-        // Editar cliente
-        async function editCliente(id) {
-            // Implementar lógica de edição
-            console.log("Editar cliente:", id);
-        }
-
-        // Alternar status do cliente
-        async function toggleClienteStatus(id) {
-            // Implementar lógica de ativar/desativar
-            console.log("Alternar status do cliente:", id);
+            clientesDB[clienteIndex].status = !clientesDB[clienteIndex].status;
+            atualizarTabela();
         }
     </script>
 </body>
