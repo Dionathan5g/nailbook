@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NailBook - Agendamentos</title>
     <link rel="stylesheet" href="Css/Css.css">
     <script src="js/agendamentos.js" defer></script>
@@ -42,7 +43,6 @@
     </main>
 
     <script>
-        // Este script será movido para agendamentos.js
         document.addEventListener('DOMContentLoaded', function () {
             // Carrega os agendamentos do LocalStorage
             const agendamentos = JSON.parse(localStorage.getItem('agendamentos')) || {};
