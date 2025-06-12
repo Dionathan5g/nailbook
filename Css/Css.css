@@ -413,3 +413,123 @@ tr:hover {
 .alert-success {
     background-color: #4CAF50;
 }
+/* ===== ESTILOS PARA RELATÓRIOS ===== */
+.secao-relatorios {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+
+.filtros-relatorio {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+    align-items: end;
+}
+
+.cards-relatorios {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.card-relatorio {
+    background: var(--cor-fundo);
+    padding: 1.5rem;
+    border-radius: 8px;
+    text-align: center;
+    border-left: 4px solid var(--cor-primaria);
+}
+
+.card-relatorio h3 {
+    color: var(--cor-primaria);
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.card-relatorio .valor {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--cor-texto);
+}
+
+.card-relatorio .periodo {
+    color: var(--cor-texto-claro);
+    font-size: 0.9rem;
+}
+
+.graficos {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin: 3rem 0;
+}
+
+.grafico-container {
+    background: var(--cor-fundo);
+    padding: 1.5rem;
+    border-radius: 8px;
+}
+
+.grafico-container h3 {
+    color: var(--cor-primaria);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.tabela-relatorio {
+    margin: 3rem 0;
+}
+
+.tabela-relatorio h3 {
+    color: var(--cor-primaria);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+th, td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid var(--cor-borda);
+}
+
+th {
+    background-color: var(--cor-primaria);
+    color: white;
+    font-weight: 500;
+}
+
+tr:nth-child(even) {
+    background-color: var(--cor-fundo);
+}
+
+tr:hover {
+    background-color: #fff5f7;
+}
+
+@media (max-width: 768px) {
+    .graficos {
+        grid-template-columns: 1fr;
+    }
+    
+    .filtros-relatorio {
+        grid-template-columns: 1fr;
+    }
+}
