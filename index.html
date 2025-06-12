@@ -1,99 +1,153 @@
 <!DOCTYPE html>
-<html lang="pt-br">
-
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>NailBook - Agendamentos</title>
-    <link rel="stylesheet" href="Css/Css.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nailbook - Agendamento</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #fff5f7;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #ff6b8b;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        input, select, button {
+            padding: 12px;
+            border: 2px solid #eee;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #ff6b8b;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        button:hover {
+            background-color: #ff4757;
+            transform: translateY(-2px);
+        }
+        #status {
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 8px;
+            display: none;
+            text-align: center;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+    </style>
 </head>
-
 <body>
-    <header>
-        <div class="logo-container">
-            <img src="Imagens/logosite.png" alt="Logo NailBook" class="logo">
-            <h1>NailBook - Agendamentos</h1>
-        </div>
-
-        <nav class="menu">
-            <ul>
-                <li><a href="index.html">Início</a></li>
-                <li><a href="agendamentos.html">Agendamentos</a></li>
-                <li><a href="clientes.html">Clientes</a></li>
-                <li><a href="relatorios.html">Relatórios</a></li>
-                <li><a href="contato.html">Fale Conosco</a></li>
-            </ul>
-        </nav>
-    </header>
-
-    <main>
-        <form id="form-agendamento" method="GET">
-            <label for="nome">Nome da Cliente:</label>
-            <input type="text" id="nome" name="nome" required>
-
-            <label for="servico">Serviço:</label>
-            <select id="servico" name="servico" required>
-                <option value="">Selecione</option>
-                <option value="Manicure" data-preco="30.00">Manicure - R$ 30,00</option>
-                <option value="Pedicure" data-preco="40.00">Pedicure - R$ 40,00</option>
-                <option value="Unha em Gel" data-preco="70.00">Unha em Gel - R$ 70,00</option>
-                <option value="Francesinha" data-preco="60.00">Francesinha - R$ 60,00</option>
+    <div class="container">
+        <h1>Agende Seu Horário</h1>
+        
+        <form id="form-agendamento">
+            <input type="text" id="nome" placeholder="Nome completo" required>
+            <input type="email" id="email" placeholder="E-mail" required>
+            <input type="tel" id="telefone" placeholder="Telefone (opcional)">
+            
+            <select id="servico" required>
+                <option value="">Selecione o serviço</option>
+                <option value="Manicure">Manicure</option>
+                <option value="Pedicure">Pedicure</option>
+                <option value="Alongamento">Alongamento de Unhas</option>
+                <option value="Design">Design de Unhas</option>
             </select>
-
-            <label for="preco">Preço:</label>
-            <input type="text" id="preco" name="preco" readonly>
-
-            <label for="horario">Horário:</label>
-            <input type="time" id="horario" name="horario" required>
-
-            <label for="data">Data:</label>
-            <input type="date" id="data" name="data" required>
-
-            <button type="submit">Agendar</button>
+            
+            <input type="date" id="data" required>
+            <input type="time" id="hora" required>
+            
+            <button type="button" onclick="salvarAgendamento()">Agendar</button>
         </form>
-    </main>
+        
+        <div id="status"></div>
+    </div>
 
+    <!-- Integração Supabase -->
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script>
-        // Atualiza o preço quando o serviço é selecionado
-        document.getElementById('servico').addEventListener('change', function () {
-            const servicoSelecionado = this.options[this.selectedIndex];
-            const preco = servicoSelecionado.getAttribute('data-preco');
-            document.getElementById('preco').value = preco ? `R$ ${parseFloat(preco).toFixed(2)}` : '';
-        });
+        // Configuração com SUAS credenciais
+        const supabaseUrl = 'https://qjygugnuyrkcmammapmf.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFqeWd1Z251eXJrY21hbW1hcG1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk3MzMzNTYsImV4cCI6MjA2NTMwOTM1Nn0.D1WJOzdo07SvlOOIqvAnv-taVpNsIvPalrNjfQsLM5M';
+        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
-        // Processa o formulário
-        document.getElementById('form-agendamento').addEventListener('submit', function (e) {
-            e.preventDefault();
+        async function salvarAgendamento() {
+            // Coleta dados do formulário
+            const nome = document.getElementById('nome').value;
+            const email = document.getElementById('email').value;
+            const telefone = document.getElementById('telefone').value;
+            const servico = document.getElementById('servico').value;
+            const data = document.getElementById('data').value;
+            const hora = document.getElementById('hora').value;
+            const statusDiv = document.getElementById('status');
 
-            const nome = encodeURIComponent(document.getElementById('nome').value);
-            const servico = encodeURIComponent(document.getElementById('servico').value);
-            const preco = encodeURIComponent(document.getElementById('preco').value.replace('R$ ', ''));
-            const horario = encodeURIComponent(document.getElementById('horario').value);
-            const data = encodeURIComponent(document.getElementById('data').value);
-
-            // Salva no localStorage
-            const agendamentos = JSON.parse(localStorage.getItem('agendamentos')) || {};
-            const dataFormatada = decodeURIComponent(data).split('-').reverse().join('-');
-
-            if (!agendamentos[dataFormatada]) {
-                agendamentos[dataFormatada] = [];
+            // Validação
+            if (!nome || !email || !servico || !data || !hora) {
+                statusDiv.textContent = "⚠️ Preencha todos os campos obrigatórios!";
+                statusDiv.className = "error";
+                statusDiv.style.display = "block";
+                return;
             }
 
-            agendamentos[dataFormatada].push({
-                nome: decodeURIComponent(nome),
-                servico: decodeURIComponent(servico),
-                preco: parseFloat(preco),
-                horario: decodeURIComponent(horario)
-            });
+            try {
+                // Envia para o Supabase
+                const { error } = await supabase
+                    .from('agendamentos')
+                    .insert([{ 
+                        nome, 
+                        email, 
+                        telefone: telefone || null, 
+                        servico, 
+                        data_agendamento: `${data}T${hora}:00` 
+                    }]);
 
-            localStorage.setItem('agendamentos', JSON.stringify(agendamentos));
+                if (error) throw error;
 
-            // Mensagem de sucesso
-            alert("✅ Agendamento realizado com sucesso!");
+                // Feedback de sucesso
+                statusDiv.textContent = "✅ Agendamento salvo com sucesso!";
+                statusDiv.className = "success";
+                statusDiv.style.display = "block";
+                
+                // Limpa o formulário após 2 segundos
+                setTimeout(() => {
+                    document.getElementById('form-agendamento').reset();
+                    statusDiv.style.display = "none";
+                }, 2000);
 
-            // Redirecionamento
-            window.location.href = "index.html";
-        });
+            } catch (error) {
+                console.error("Erro:", error);
+                statusDiv.textContent = `❌ Erro: ${error.message}`;
+                statusDiv.className = "error";
+                statusDiv.style.display = "block";
+            }
+        }
     </script>
 </body>
-
 </html>
