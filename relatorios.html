@@ -10,6 +10,7 @@
 <body>
     <header class="header-padrao">
         <div class="logo-container">
+            <img src="imagens/logosite.png" alt="Logo NailBook" class="logo">
             <h1>NailBook - Relatórios</h1>
         </div>
         <nav class="menu-padrao">
@@ -29,12 +30,12 @@
             
             <div class="filtros-relatorio">
                 <div class="input-group">
-                    <label for="data-inicio">Data Início:</label>
+                    <label for="data-inicio"><i class="fas fa-calendar-day"></i> Data Início:</label>
                     <input type="date" id="data-inicio">
                 </div>
                 
                 <div class="input-group">
-                    <label for="data-fim">Data Fim:</label>
+                    <label for="data-fim"><i class="fas fa-calendar-day"></i> Data Fim:</label>
                     <input type="date" id="data-fim">
                 </div>
                 
@@ -45,51 +46,67 @@
             
             <div class="cards-relatorios">
                 <div class="card-relatorio">
-                    <h3><i class="fas fa-money-bill-wave"></i> Total Arrecadado</h3>
+                    <div class="icone-card">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                    <h3>Total Arrecadado</h3>
                     <p class="valor" id="total-arrecadado">R$ 0,00</p>
-                    <p class="periodo">Período selecionado</p>
+                    <p class="periodo" id="periodo-arrecadado">Período selecionado</p>
                 </div>
                 
                 <div class="card-relatorio">
-                    <h3><i class="fas fa-calendar-check"></i> Serviços Realizados</h3>
+                    <div class="icone-card">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <h3>Serviços Realizados</h3>
                     <p class="valor" id="total-servicos">0</p>
-                    <p class="periodo">Período selecionado</p>
+                    <p class="periodo" id="periodo-servicos">Período selecionado</p>
                 </div>
                 
                 <div class="card-relatorio">
-                    <h3><i class="fas fa-user-friends"></i> Clientes Atendidos</h3>
+                    <div class="icone-card">
+                        <i class="fas fa-user-friends"></i>
+                    </div>
+                    <h3>Clientes Atendidos</h3>
                     <p class="valor" id="total-clientes">0</p>
-                    <p class="periodo">Período selecionado</p>
+                    <p class="periodo" id="periodo-clientes">Período selecionado</p>
                 </div>
             </div>
             
-            <div class="graficos">
-                <div class="grafico-container">
+            <div class="graficos-container">
+                <div class="grafico-box">
                     <h3><i class="fas fa-chart-pie"></i> Serviços Mais Populares</h3>
-                    <canvas id="grafico-servicos"></canvas>
+                    <div class="grafico-wrapper">
+                        <canvas id="grafico-servicos"></canvas>
+                    </div>
                 </div>
                 
-                <div class="grafico-container">
+                <div class="grafico-box">
                     <h3><i class="fas fa-chart-bar"></i> Faturamento Mensal</h3>
-                    <canvas id="grafico-mensal"></canvas>
+                    <div class="grafico-wrapper">
+                        <canvas id="grafico-mensal"></canvas>
+                    </div>
                 </div>
             </div>
             
             <div class="tabela-relatorio">
                 <h3><i class="fas fa-table"></i> Detalhes dos Agendamentos</h3>
-                <table id="tabela-agendamentos">
-                    <thead>
-                        <tr>
-                            <th>Data</th>
-                            <th>Cliente</th>
-                            <th>Serviço</th>
-                            <th>Valor</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Dados serão inseridos via JavaScript -->
-                    </tbody>
-                </table>
+                <div class="tabela-wrapper">
+                    <table id="tabela-agendamentos">
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Cliente</th>
+                                <th>Serviço</th>
+                                <th>Valor</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Dados serão inseridos via JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </section>
     </main>
@@ -101,7 +118,7 @@
     <!-- Conexão com Supabase -->
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script>
-        // Configuração do Supabase (substitua pelas suas credenciais)
+        // Configuração do Supabase
         const supabaseUrl = 'https://qjygugnuyrkcmammapmf.supabase.co';
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...';
         const supabase = supabase.createClient(supabaseUrl, supabaseKey);
@@ -137,12 +154,19 @@
                 // Ajusta data fim para incluir o dia inteiro
                 dataFim.setHours(23, 59, 59, 999);
                 
+                // Formata período para exibição
+                const periodo = `${dataInicio.toLocaleDateString('pt-BR')} a ${dataFim.toLocaleDateString('pt-BR')}`;
+                document.querySelectorAll('.periodo').forEach(el => {
+                    el.textContent = periodo;
+                });
+                
                 // Busca agendamentos no período
                 const { data, error } = await supabase
                     .from('agendamentos')
                     .select('*')
                     .gte('data', dataInicio.toISOString())
-                    .lte('data', dataFim.toISOString());
+                    .lte('data', dataFim.toISOString())
+                    .order('data', { ascending: false });
                 
                 if (error) throw error;
                 
@@ -162,7 +186,6 @@
         function atualizarResumo() {
             // Calcula totais
             const totalArrecadado = agendamentos.reduce((sum, item) => sum + (item.preco || 0), 0);
-            const servicosUnicos = [...new Set(agendamentos.map(item => item.servico))];
             const clientesUnicos = [...new Set(agendamentos.map(item => item.nome))];
             
             // Atualiza os cards
@@ -181,12 +204,26 @@
                 
                 const data = new Date(agendamento.data);
                 const dataFormatada = data.toLocaleDateString('pt-BR');
+                const horaFormatada = data.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+                
+                // Determina o status
+                let status = 'Concluído';
+                let statusClass = 'concluido';
+                
+                if (new Date(agendamento.data) > new Date()) {
+                    status = 'Agendado';
+                    statusClass = 'agendado';
+                } else if (agendamento.cancelado) {
+                    status = 'Cancelado';
+                    statusClass = 'cancelado';
+                }
                 
                 tr.innerHTML = `
-                    <td>${dataFormatada}</td>
+                    <td>${dataFormatada} ${horaFormatada}</td>
                     <td>${agendamento.nome || 'Não informado'}</td>
                     <td>${agendamento.servico || 'Não especificado'}</td>
                     <td>R$ ${(agendamento.preco || 0).toFixed(2).replace('.', ',')}</td>
+                    <td><span class="status ${statusClass}">${status}</span></td>
                 `;
                 
                 tbody.appendChild(tr);
@@ -212,6 +249,13 @@
                 
                 meses[mesAno].total += item.preco || 0;
                 meses[mesAno].count += 1;
+            });
+            
+            // Ordena os meses cronologicamente
+            const mesesOrdenados = Object.keys(meses).sort((a, b) => {
+                const [mesA, anoA] = a.split('/').map(Number);
+                const [mesB, anoB] = b.split('/').map(Number);
+                return new Date(anoA, mesA - 1) - new Date(anoB, mesB - 1);
             });
             
             // Destrói gráficos existentes
@@ -247,10 +291,10 @@
             graficoMensal = new Chart(ctxMensal, {
                 type: 'bar',
                 data: {
-                    labels: Object.keys(meses),
+                    labels: mesesOrdenados,
                     datasets: [{
                         label: 'Faturamento (R$)',
-                        data: Object.values(meses).map(m => m.total),
+                        data: mesesOrdenados.map(mes => meses[mes].total),
                         backgroundColor: '#ff6b98',
                         borderWidth: 1
                     }]
