@@ -20,9 +20,284 @@ body {
     color: var(--cor-texto);
     animation: fadeIn 0.5s ease-out;
 }
-/* ADICIONE ESTES ESTILOS AO SEU ARQUIVO CSS */
+:root {
+    --cor-primaria: #8a4fff;
+    --cor-secundaria: #b56dea;
+    --cor-fundo: #f8f5ff;
+    --cor-texto: #333;
+    --cor-texto-claro: #666;
+    --cor-borda: #e0d0ff;
+    --cor-destaque: #ff6b98;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+    background-color: var(--cor-fundo);
+    color: var(--cor-texto);
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* TOPO E LOGO */
+header {
+    background-color: var(--cor-primaria);
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    animation: slideInFromLeft 0.7s ease-out;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 10px;
+}
+
+.logo {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid white;
+    animation: pulse 2s infinite;
+}
+
+.logo:hover {
+    animation: none;
+    transform: rotate(10deg);
+}
+
+header h1 {
+    font-size: 1.8em;
+    color: white;
+}
+
+/* MENU */
+nav.menu {
+    background-color: var(--cor-primaria);
+    text-align: center;
+}
+
+nav.menu ul {
+    list-style-type: none;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 0;
+    margin-top: 10px;
+}
+
+nav.menu li {
+    margin: 0 15px;
+}
+
+nav.menu a {
+    display: block;
+    padding: 12px 10px;
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    font-size: 1em;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+nav.menu a:hover {
+    background-color: var(--cor-secundaria);
+    border-radius: 8px;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+nav.menu a.active {
+    background-color: var(--cor-secundaria);
+    border-radius: 8px;
+}
+
+nav.menu a:active {
+    transform: translateY(1px);
+}
+
+/* FORMULÁRIO */
+main {
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    animation: slideInFromRight 0.7s ease-out;
+}
+
+h2 {
+    color: var(--cor-primaria);
+    margin-bottom: 20px;
+    font-size: 1.8em;
+}
 
 /* ESTILOS ESPECÍFICOS PARA A TABELA DE AGENDAMENTOS */
+#lista-agendamentos table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+#lista-agendamentos th {
+    background-color: var(--cor-primaria);
+    color: white;
+    padding: 12px 15px;
+    text-align: left;
+    font-weight: 600;
+    position: sticky;
+    top: 0;
+}
+
+#lista-agendamentos td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #eee;
+    color: #333;
+    font-weight: 500;
+}
+
+#lista-agendamentos tr:nth-child(even) {
+    background-color: #faf9ff;
+}
+
+#lista-agendamentos tr:hover {
+    background-color: #f0ebff;
+}
+
+#lista-agendamentos tr:last-child td {
+    border-bottom: none;
+}
+
+/* MELHORIAS PARA OS FILTROS */
+.filters {
+    background-color: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    margin-bottom: 20px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.filters label {
+    font-weight: 600;
+    color: var(--cor-primaria);
+    margin-right: 5px;
+}
+
+.filters input {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    min-width: 180px;
+}
+
+.filters button {
+    padding: 8px 16px;
+    background-color: var(--cor-primaria);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-weight: 500;
+}
+
+.filters button:hover {
+    background-color: var(--cor-secundaria);
+    transform: translateY(-1px);
+}
+
+.filters button:active {
+    transform: translateY(0);
+}
+
+/* ANIMAÇÕES */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes slideInFromLeft {
+    from {
+        transform: translateX(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideInFromRight {
+    from {
+        transform: translateX(50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* RESPONSIVIDADE */
+@media (max-width: 768px) {
+    nav.menu ul {
+        flex-direction: column;
+        gap: 5px;
+    }
+    
+    .filters {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    #lista-agendamentos table {
+        display: block;
+        overflow-x: auto;
+    }
+    
+    #lista-agendamentos th,
+    #lista-agendamentos td {
+        padding: 10px;
+        font-size: 0.9em;
+    }
+}
+
+/* [RESTANTE DO SEU CSS EXISTENTE PODE SER MANTIDO AQUI] */
 #lista-agendamentos table {
     width: 100%;
     border-collapse: collapse;
