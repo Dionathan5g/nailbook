@@ -702,3 +702,133 @@ tr:hover {
         width: 95%;
     }
 }
+/* ===== ESTILOS PARA RELATÓRIOS ===== */
+.secao-relatorios {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+
+.filtros-relatorio {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+    align-items: end;
+}
+
+.cards-relatorios {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.card-relatorio {
+    background: var(--cor-fundo);
+    padding: 1.5rem;
+    border-radius: 8px;
+    text-align: center;
+    border-left: 4px solid var(--cor-primaria);
+}
+
+.card-relatorio .icone-card {
+    font-size: 2rem;
+    color: var(--cor-primaria);
+    margin-bottom: 1rem;
+}
+
+.card-relatorio h3 {
+    color: var(--cor-texto);
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+}
+
+.card-relatorio .valor {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--cor-primaria);
+    margin: 0.5rem 0;
+}
+
+.card-relatorio .periodo {
+    color: var(--cor-texto-claro);
+    font-size: 0.9rem;
+}
+
+.graficos-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    margin: 3rem 0;
+}
+
+.grafico-box {
+    background: var(--cor-fundo);
+    padding: 1.5rem;
+    border-radius: 8px;
+}
+
+.grafico-box h3 {
+    color: var(--cor-primaria);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.grafico-wrapper {
+    position: relative;
+    height: 300px;
+}
+
+.tabela-relatorio {
+    margin: 3rem 0;
+}
+
+.tabela-relatorio h3 {
+    color: var(--cor-primaria);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.tabela-wrapper {
+    overflow-x: auto;
+}
+
+.status {
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.status.concluido {
+    background-color: #e3f7e8;
+    color: #2e7d32;
+}
+
+.status.agendado {
+    background-color: #e3f2fd;
+    color: #1565c0;
+}
+
+.status.cancelado {
+    background-color: #ffebee;
+    color: #c62828;
+}
+
+@media (min-width: 992px) {
+    .graficos-container {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .filtros-relatorio {
+        grid-template-columns: 1fr;
+    }
+}
