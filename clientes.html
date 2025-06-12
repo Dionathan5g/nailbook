@@ -2,16 +2,16 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>NailBook - Clientes</title>
+    <title>NailBook - Início</title>
     <link rel="stylesheet" href="Css/Css.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
     <header>
         <div class="logo-container">
             <img src="Imagens/logosite.png" alt="Logo NailBook" class="logo">
-            <h1>NailBook - Clientes</h1>
+            <h1>NailBook - Sistema de Agendamentos</h1>
         </div>
-
         <nav class="menu">
             <ul>
                 <li><a href="index.html">Início</a></li>
@@ -24,42 +24,63 @@
     </header>
 
     <main>
-        <h2>Lista de Clientes</h2>
-        <div class="clientes-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Nome</th>
-                        <th>Último Serviço</th>
-                        <th>Data</th>
-                        <th>Valor</th>
-                    </tr>
-                </thead>
-                <tbody id="lista-clientes">
-                    <!-- Os clientes serão carregados via JavaScript -->
-                </tbody>
-            </table>
-        </div>
+        <section class="banner">
+            <h2>Bem-vindo ao NailBook</h2>
+            <p>O sistema completo para gerenciamento de sua manicure</p>
+        </section>
+
+        <section class="destaques">
+            <div class="card">
+                <h3>Agendamentos</h3>
+                <p>Gerencie todos os seus agendamentos de forma simples e eficiente.</p>
+                <a href="agendamentos.html" class="btn">Acessar</a>
+            </div>
+            <div class="card">
+                <h3>Clientes</h3>
+                <p>Mantenha o cadastro de seus clientes sempre atualizado.</p>
+                <a href="clientes.html" class="btn">Acessar</a>
+            </div>
+            <div class="card">
+                <h3>Relatórios</h3>
+                <p>Tenha insights sobre o desempenho do seu negócio.</p>
+                <a href="relatorios.html" class="btn">Acessar</a>
+            </div>
+        </section>
     </main>
 
-    <!-- Loader -->
-    <div class="loader">
-        <div class="spinner"></div>
-    </div>
+    <footer>
+        <p>&copy; 2023 NailBook - Todos os direitos reservados</p>
+    </footer>
 
-    <script src="Java/clientes.js"></script>
+    <!-- Conexão Supabase -->
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script>
-        // Animação para a tabela de clientes
-        document.addEventListener('DOMContentLoaded', function() {
-            const rows = document.querySelectorAll('#lista-clientes tr');
-            rows.forEach((row, index) => {
-                setTimeout(() => {
-                    row.style.opacity = '0';
-                    row.style.animation = 'fadeIn 0.5s forwards';
-                    row.style.animationDelay = `${index * 0.1}s`;
-                }, 0);
-            });
-        });
+        // Configuração do Supabase (USE SUAS CREDENCIAIS)
+        const supabaseUrl = 'https://qjygugnuyrkcmammapmf.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...';
+        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+        // Função para salvar dados (ALTERE OS IDs CONFORME SEU FORMULÁRIO)
+        async function salvarDados() {
+            const dados = {
+                nome: document.getElementById('nome').value,
+                email: document.getElementById('email').value,
+                telefone: document.getElementById('telefone').value,
+                servico: document.getElementById('servico').value,
+                data: document.getElementById('data').value + ' ' + document.getElementById('hora').value
+            };
+
+            const { error } = await supabase
+                .from('agendamentos')
+                .insert([dados]);
+
+            if (error) {
+                alert("Erro ao salvar: " + error.message);
+            } else {
+                alert("Dados salvos com sucesso!");
+            }
+        }
     </script>
+    <script src="Java/javacript.js"></script>
 </body>
 </html>
