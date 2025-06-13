@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NailBook - Agendamentos</title>
     <link rel="stylesheet" href="Css/Css.css">
-    <script src="js/agendamentos.js" defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 
 <body>
@@ -16,11 +16,11 @@
             <h1>NailBook - Agendamentos</h1>
         </div>
 
-         <nav class="menu">
+        <nav class="menu">
             <ul>
                 <li><a href="index.html"><i class="fas fa-home"></i> Início</a></li>
-                <li><a href="agendamentos.html"><i class="fas fa-calendar-alt"></i> Agendamentos</a></li>
-                <li><a href="clientes.html" class="active"><i class="fas fa-users"></i> Clientes</a></li>
+                <li><a href="agendamentos.html" class="active"><i class="fas fa-calendar-alt"></i> Agendamentos</a></li>
+                <li><a href="clientes.html"><i class="fas fa-users"></i> Clientes</a></li>
                 <li><a href="relatorios.html"><i class="fas fa-chart-pie"></i> Relatórios</a></li>
                 <li><a href="contato.html"><i class="fas fa-envelope"></i> Fale Conosco</a></li>
             </ul>
@@ -28,94 +28,157 @@
     </header>
 
     <main>
-        <h2>Agendamentos Recentes</h2>
+        <form id="form-agendamento">
+            <div class="form-group">
+                <label for="nome"><i class="fas fa-user"></i> Nome da Cliente:</label>
+                <input type="text" id="nome" name="nome" required>
+            </div>
 
-        <div class="filters">
-            <label for="filter-date">Filtrar por data:</label>
-            <input type="date" id="filter-date">
-            <button id="btn-filter">Filtrar</button>
-            <button id="btn-clear">Limpar</button>
-        </div>
+            <div class="form-group">
+                <label for="servico"><i class="fas fa-spa"></i> Serviço:</label>
+                <select id="servico" name="servico" required>
+                    <option value="">Selecione</option>
+                    <option value="Manicure" data-preco="30.00">Manicure - R$ 30,00</option>
+                    <option value="Pedicure" data-preco="40.00">Pedicure - R$ 40,00</option>
+                    <option value="Unha em Gel" data-preco="70.00">Unha em Gel - R$ 70,00</option>
+                    <option value="Francesinha" data-preco="60.00">Francesinha - R$ 60,00</option>
+                </select>
+            </div>
 
-        <div id="lista-agendamentos">
-            <!-- Os agendamentos serão carregados aqui -->
+            <div class="form-group">
+                <label for="preco"><i class="fas fa-money-bill-wave"></i> Preço:</label>
+                <input type="text" id="preco" name="preco" readonly>
+            </div>
+
+            <div class="form-group">
+                <label for="horario"><i class="fas fa-clock"></i> Horário:</label>
+                <input type="time" id="horario" name="horario" required>
+            </div>
+
+            <div class="form-group">
+                <label for="data"><i class="fas fa-calendar-day"></i> Data:</label>
+                <input type="date" id="data" name="data" required>
+            </div>
+
+            <button type="submit" class="btn-submit"><i class="fas fa-save"></i> Agendar</button>
+        </form>
+
+        <div class="lista-agendamentos">
+            <h2><i class="fas fa-list"></i> Próximos Agendamentos</h2>
+            <div id="lista-agendamentos">
+                <!-- Agendamentos serão carregados aqui -->
+            </div>
         </div>
     </main>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // Carrega os agendamentos do LocalStorage
-            const agendamentos = JSON.parse(localStorage.getItem('agendamentos')) || {};
-
-            // Exibe os agendamentos
-            const container = document.getElementById('lista-agendamentos');
-
-            if (Object.keys(agendamentos).length === 0) {
-                container.innerHTML = '<p>Nenhum agendamento encontrado.</p>';
-                return;
-            }
-
-            // Ordena as datas da mais recente para a mais antiga
-            const datasOrdenadas = Object.keys(agendamentos).sort((a, b) => {
-                return new Date(b.split('-').reverse().join('-')) - new Date(a.split('-').reverse().join('-'));
+        document.addEventListener("DOMContentLoaded", function() {
+            // Atualiza preço quando serviço é selecionado
+            document.getElementById('servico').addEventListener('change', function() {
+                const servico = this.options[this.selectedIndex];
+                const preco = servico.getAttribute('data-preco');
+                document.getElementById('preco').value = preco ? `R$ ${parseFloat(preco).toFixed(2)}` : '';
             });
 
-            // Cria a tabela de agendamentos
-            let html = '<table><thead><tr><th>Data</th><th>Cliente</th><th>Serviço</th><th>Horário</th><th>Preço</th></tr></thead><tbody>';
+            // Processa formulário
+            document.getElementById('form-agendamento').addEventListener('submit', function(e) {
+                e.preventDefault();
 
-            datasOrdenadas.forEach(data => {
-                agendamentos[data].forEach(agendamento => {
-                    html += `
-                        <tr>
-                            <td>${data}</td>
-                            <td>${agendamento.nome}</td>
-                            <td>${agendamento.servico}</td>
-                            <td>${agendamento.horario}</td>
-                            <td>R$ ${agendamento.preco.toFixed(2)}</td>
-                        </tr>
-                    `;
-                });
+                const agendamento = {
+                    id: Date.now(),
+                    nome: document.getElementById('nome').value,
+                    servico: document.getElementById('servico').value,
+                    preco: parseFloat(document.getElementById('preco').value.replace('R$ ', '')),
+                    horario: document.getElementById('horario').value,
+                    data: document.getElementById('data').value,
+                    status: 'Agendado'
+                };
+
+                // Salva no localStorage
+                let agendamentos = JSON.parse(localStorage.getItem('agendamentos')) || [];
+                agendamentos.push(agendamento);
+                localStorage.setItem('agendamentos', JSON.stringify(agendamentos));
+
+                alert('Agendamento realizado com sucesso!');
+                this.reset();
+                carregarAgendamentos();
             });
 
-            html += '</tbody></table>';
-            container.innerHTML = html;
+            // Carrega agendamentos
+            function carregarAgendamentos() {
+                const agendamentos = JSON.parse(localStorage.getItem('agendamentos')) || [];
+                const lista = document.getElementById('lista-agendamentos');
+                lista.innerHTML = '';
 
-            // Filtros
-            document.getElementById('btn-filter').addEventListener('click', function () {
-                const dataFiltro = document.getElementById('filter-date').value;
-                if (!dataFiltro) return;
-
-                const dataFormatada = dataFiltro.split('-').reverse().join('-');
-                const agendamentosFiltrados = agendamentos[dataFormatada] || [];
-
-                let htmlFiltrado = '<table><thead><tr><th>Data</th><th>Cliente</th><th>Serviço</th><th>Horário</th><th>Preço</th></tr></thead><tbody>';
-
-                if (agendamentosFiltrados.length === 0) {
-                    htmlFiltrado += '<tr><td colspan="5">Nenhum agendamento para esta data</td></tr>';
-                } else {
-                    agendamentosFiltrados.forEach(agendamento => {
-                        htmlFiltrado += `
-                            <tr>
-                                <td>${dataFormatada}</td>
-                                <td>${agendamento.nome}</td>
-                                <td>${agendamento.servico}</td>
-                                <td>${agendamento.horario}</td>
-                                <td>R$ ${agendamento.preco.toFixed(2)}</td>
-                            </tr>
-                        `;
-                    });
+                if (agendamentos.length === 0) {
+                    lista.innerHTML = '<p>Nenhum agendamento encontrado.</p>';
+                    return;
                 }
 
-                htmlFiltrado += '</tbody></table>';
-                container.innerHTML = htmlFiltrado;
-            });
+                // Ordena por data mais próxima
+                agendamentos.sort((a, b) => new Date(a.data) - new Date(b.data));
 
-            document.getElementById('btn-clear').addEventListener('click', function () {
-                document.getElementById('filter-date').value = '';
-                container.innerHTML = html;
-            });
+                const table = document.createElement('table');
+                table.innerHTML = `
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Cliente</th>
+                            <th>Serviço</th>
+                            <th>Horário</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                `;
+
+                const tbody = table.querySelector('tbody');
+                agendamentos.forEach(ag => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${ag.data.split('-').reverse().join('/')}</td>
+                        <td>${ag.nome}</td>
+                        <td>${ag.servico}</td>
+                        <td>${ag.horario}</td>
+                        <td>
+                            <button class="btn-action concluir" data-id="${ag.id}"><i class="fas fa-check"></i></button>
+                            <button class="btn-action cancelar" data-id="${ag.id}"><i class="fas fa-times"></i></button>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+
+                lista.appendChild(table);
+
+                // Adiciona eventos aos botões
+                document.querySelectorAll('.concluir').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        atualizarStatus(this.dataset.id, 'Feito');
+                    });
+                });
+
+                document.querySelectorAll('.cancelar').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        atualizarStatus(this.dataset.id, 'Cancelado');
+                    });
+                });
+            }
+
+            function atualizarStatus(id, status) {
+                let agendamentos = JSON.parse(localStorage.getItem('agendamentos')) || [];
+                agendamentos = agendamentos.map(ag => {
+                    if (ag.id == id) {
+                        return { ...ag, status };
+                    }
+                    return ag;
+                });
+                localStorage.setItem('agendamentos', JSON.stringify(agendamentos));
+                carregarAgendamentos();
+            }
+
+            // Carrega agendamentos ao iniciar
+            carregarAgendamentos();
         });
     </script>
 </body>
-
 </html>
