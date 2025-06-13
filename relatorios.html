@@ -2,81 +2,84 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NailBook - Relatórios</title>
     <link rel="stylesheet" href="Css/Css.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <header class="header-padrao">
+    <header>
         <div class="logo-container">
             <img src="Imagens/logosite.png" alt="Logo NailBook" class="logo">
             <h1>NailBook - Relatórios</h1>
         </div>
+
         <nav class="menu">
             <ul>
                 <li><a href="index.html"><i class="fas fa-home"></i> Início</a></li>
                 <li><a href="agendamentos.html"><i class="fas fa-calendar-alt"></i> Agendamentos</a></li>
-                <li><a href="clientes.html" class="active"><i class="fas fa-users"></i> Clientes</a></li>
-                <li><a href="relatorios.html"><i class="fas fa-chart-pie"></i> Relatórios</a></li>
+                <li><a href="clientes.html"><i class="fas fa-users"></i> Clientes</a></li>
+                <li><a href="relatorios.html" class="active"><i class="fas fa-chart-pie"></i> Relatórios</a></li>
                 <li><a href="contato.html"><i class="fas fa-envelope"></i> Fale Conosco</a></li>
             </ul>
         </nav>
     </header>
 
-    <main class="container-padrao">
-        <section class="formulario-padrao">
+    <main>
+        <section class="filtros-relatorio">
             <h2><i class="fas fa-filter"></i> Filtros do Relatório</h2>
             <form id="form-filtro">
                 <div class="grupo-input-duplo">
-                    <div class="grupo-input">
-                        <label for="data-inicio">Data Início:</label>
-                        <input type="date" id="data-inicio" class="form-control">
+                    <div class="form-group">
+                        <label for="data-inicio"><i class="fas fa-calendar-day"></i> Data Início:</label>
+                        <input type="date" id="data-inicio">
                     </div>
                     
-                    <div class="grupo-input">
-                        <label for="data-fim">Data Fim:</label>
-                        <input type="date" id="data-fim" class="form-control">
+                    <div class="form-group">
+                        <label for="data-fim"><i class="fas fa-calendar-day"></i> Data Fim:</label>
+                        <input type="date" id="data-fim">
                     </div>
                 </div>
                 
-                <div class="grupo-input">
-                    <label for="filtro-status">Status:</label>
-                    <select id="filtro-status" class="form-control">
+                <div class="form-group">
+                    <label for="filtro-status"><i class="fas fa-info-circle"></i> Status:</label>
+                    <select id="filtro-status">
                         <option value="todos">Todos</option>
-                        <option value="concluido">Concluídos</option>
-                        <option value="agendado">Agendados</option>
-                        <option value="cancelado">Cancelados</option>
+                        <option value="Feito">Concluídos</option>
+                        <option value="Agendado">Agendados</option>
+                        <option value="Cancelado">Cancelados</option>
                     </select>
                 </div>
                 
-                <button type="submit" class="botao-padrao">
-                    <i class="fas fa-chart-bar"></i> Gerar Relatório
-                </button>
+                <button type="submit" class="btn-submit"><i class="fas fa-chart-bar"></i> Gerar Relatório</button>
             </form>
         </section>
 
-        <section class="lista-padrao">
+        <section class="resultados-relatorio">
             <h2><i class="fas fa-list"></i> Resultados</h2>
             
-            <div class="resumo-padrao">
+            <div class="resumo-relatorio">
                 <div class="resumo-item">
-                    <span class="resumo-valor" id="total-arrecadado">R$ 0,00</span>
-                    <span class="resumo-label">Total Arrecadado</span>
+                    <div class="resumo-icon"><i class="fas fa-money-bill-wave"></i></div>
+                    <div class="resumo-valor" id="total-arrecadado">R$ 0,00</div>
+                    <div class="resumo-label">Total Arrecadado</div>
                 </div>
                 
                 <div class="resumo-item">
-                    <span class="resumo-valor" id="total-servicos">0</span>
-                    <span class="resumo-label">Serviços Realizados</span>
+                    <div class="resumo-icon"><i class="fas fa-spa"></i></div>
+                    <div class="resumo-valor" id="total-servicos">0</div>
+                    <div class="resumo-label">Serviços Realizados</div>
                 </div>
                 
                 <div class="resumo-item">
-                    <span class="resumo-valor" id="total-clientes">0</span>
-                    <span class="resumo-label">Clientes Atendidos</span>
+                    <div class="resumo-icon"><i class="fas fa-users"></i></div>
+                    <div class="resumo-valor" id="total-clientes">0</div>
+                    <div class="resumo-label">Clientes Atendidos</div>
                 </div>
             </div>
             
-            <div class="tabela-container">
-                <table class="tabela-padrao" id="tabela-relatorio">
+            <div class="tabela-relatorio">
+                <table id="tabela-relatorio">
                     <thead>
                         <tr>
                             <th>Data</th>
@@ -86,19 +89,85 @@
                             <th>Status</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <!-- Dados serão carregados via JavaScript -->
+                    <tbody id="corpo-relatorio">
+                        <!-- Dados serão carregados aqui -->
                     </tbody>
                 </table>
             </div>
         </section>
     </main>
 
-    <footer class="footer-padrao">
-        <p>© 2023 NailBook - Todos os direitos reservados</p>
-    </footer>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Gera relatório
+            document.getElementById('form-filtro').addEventListener('submit', function(e) {
+                e.preventDefault();
+                gerarRelatorio();
+            });
 
-    <script src="js/db.js"></script>
-    <script src="relatorios.js"></script>
+            function gerarRelatorio() {
+                const dataInicio = document.getElementById('data-inicio').value;
+                const dataFim = document.getElementById('data-fim').value;
+                const status = document.getElementById('filtro-status').value;
+
+                const agendamentos = JSON.parse(localStorage.getItem('agendamentos')) || [];
+                const corpo = document.getElementById('corpo-relatorio');
+                corpo.innerHTML = '';
+
+                let totalArrecadado = 0;
+                let totalServicos = 0;
+                const clientesAtendidos = new Set();
+
+                // Filtra agendamentos
+                const agendamentosFiltrados = agendamentos.filter(ag => {
+                    const dataValida = (!dataInicio || ag.data >= dataInicio) && 
+                                     (!dataFim || ag.data <= dataFim);
+                    const statusValido = status === 'todos' || ag.status === status;
+                    return dataValida && statusValido;
+                });
+
+                // Preenche tabela
+                agendamentosFiltrados.forEach(ag => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${ag.data.split('-').reverse().join('/')}</td>
+                        <td>${ag.nome}</td>
+                        <td>${ag.servico}</td>
+                        <td>R$ ${ag.preco.toFixed(2)}</td>
+                        <td><span class="badge ${getBadgeClass(ag.status)}">${ag.status}</span></td>
+                    `;
+                    corpo.appendChild(tr);
+
+                    // Calcula totais para serviços concluídos
+                    if (ag.status === 'Feito') {
+                        totalArrecadado += ag.preco;
+                        totalServicos++;
+                        clientesAtendidos.add(ag.nome);
+                    }
+                });
+
+                // Atualiza resumo
+                document.getElementById('total-arrecadado').textContent = `R$ ${totalArrecadado.toFixed(2)}`;
+                document.getElementById('total-servicos').textContent = totalServicos;
+                document.getElementById('total-clientes').textContent = clientesAtendidos.size;
+
+                if (agendamentosFiltrados.length === 0) {
+                    corpo.innerHTML = '<tr><td colspan="5">Nenhum agendamento encontrado com os filtros selecionados</td></tr>';
+                }
+            }
+
+            function getBadgeClass(status) {
+                switch(status) {
+                    case 'Feito': return 'badge-success';
+                    case 'Agendado': return 'badge-info';
+                    case 'Cancelado': return 'badge-danger';
+                    default: return 'badge-primary';
+                }
+            }
+
+            // Gera relatório inicial
+            gerarRelatorio();
+        });
+    </script>
 </body>
 </html>
